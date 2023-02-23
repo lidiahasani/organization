@@ -12,11 +12,12 @@ public class Punonjes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String name;
+    private String emer;
 
     private String email;
 
     @ManyToOne
+    @JoinColumn(name = "id_departament")
     private Departament departament;
 
     @OneToMany(mappedBy = "punonjes")
@@ -30,12 +31,12 @@ public class Punonjes {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getEmer() {
+        return emer;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmer(String emer) {
+        this.emer = emer;
     }
 
     public String getEmail() {

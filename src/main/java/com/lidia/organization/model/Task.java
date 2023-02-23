@@ -14,6 +14,7 @@ public class Task {
     private StatusTask status;
 
     @ManyToOne
+    @JoinColumn(name = "id_projekt")
     private Projekt projekt;
 
     @ManyToOne

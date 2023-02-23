@@ -12,9 +12,9 @@ public class Departament {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String name;
+    private String emer;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departament")
+    @OneToMany(mappedBy = "departament")
     private List<Punonjes> punonjesList = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "departament")
@@ -28,12 +28,12 @@ public class Departament {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getEmer() {
+        return emer;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmer(String emer) {
+        this.emer = emer;
     }
 
     public List<Punonjes> getPunonjesList() {

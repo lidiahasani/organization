@@ -18,12 +18,14 @@ public class Projekt {
     @Column(name = "data_nisje")
     private Date dataNisje;
 
+    @Column(name = "data_perfundim")
     private Date dataPerfundim;
 
     @Enumerated(EnumType.STRING)
     private StatusProjekt status;
 
     @ManyToOne
+    @JoinColumn(name = "id_departament")
     private Departament departament;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "projekt")

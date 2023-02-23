@@ -1,13 +1,17 @@
 package com.lidia.organization.repositories;
 
 import com.lidia.organization.model.Departament;
-import org.springframework.data.jdbc.repository.query.Modifying;
-import org.springframework.data.jdbc.repository.query.Query;
-import org.springframework.data.repository.CrudRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 
-public interface DepartamentRepository extends CrudRepository<Departament, Long> {
+public interface DepartamentRepository extends JpaRepository<Departament, Integer> {
 
+    Departament findByEmer(String emer);
+
+    Departament findById(int id);
+
+    @Transactional
+    void deleteDepartamentById(int id);
 
 }
