@@ -1,11 +1,8 @@
 package com.lidia.organization.controllers;
 
-import com.electronwill.nightconfig.core.conversion.Path;
 import com.lidia.organization.dto.DepartamentDto;
-import com.lidia.organization.model.Departament;
 import com.lidia.organization.services.DepartamentService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -40,11 +37,10 @@ public class DepartamentController {
         departamentService.fshiDepartament(id);
     }
 
-    @PostMapping("/departament/ndrysho/{id}")
+    @PostMapping("/departament/ndrysho")
     public void ndryshoEmer(
-            @PathVariable("id") Integer id,
-            @RequestBody String emer){
-        departamentService.ndryshoEmer(id, emer);
+            @RequestBody DepartamentDto departamentDto){
+        departamentService.ndryshoEmer(departamentDto);
     }
 
 }

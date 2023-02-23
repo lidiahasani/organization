@@ -23,9 +23,7 @@ public class DepartamentService {
     }
 
     public void krijoDepartament(DepartamentDto departamentDto) {
-        Departament departament = new Departament();
-        departament.setEmer(departamentDto.getEmer());
-        departamentRepository.save(departament);
+        departamentRepository.save(toDepartament().apply(departamentDto));
     }
 
     public DepartamentDto kerkoDepartament(String emer){
@@ -69,11 +67,8 @@ public class DepartamentService {
         departamentRepository.deleteDepartamentById(id);
     }
 
-    public void ndryshoEmer(int id, String emer){
-        DepartamentDto departamentDto = toDepartamentDto().apply(departamentRepository.findById(id));
-        departamentDto.setEmer(emer);
+    public void ndryshoEmer(DepartamentDto departamentDto){
         Departament departament = toDepartament().apply(departamentDto);
-
         departamentRepository.save(departament);
     }
 
