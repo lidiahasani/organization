@@ -19,7 +19,6 @@ public class DepartamentDto {
 
  //   private List<ProjektDto> projektList = new ArrayList<>();
 
-    @NonNull
     public int getId() {
         return id;
     }

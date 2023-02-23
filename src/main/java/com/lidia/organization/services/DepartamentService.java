@@ -68,8 +68,7 @@ public class DepartamentService {
     }
 
     public void ndryshoEmer(DepartamentDto departamentDto){
-        Departament departament = toDepartament().apply(departamentDto);
-        departamentRepository.save(departament);
+        departamentRepository.save(toDepartament().apply(departamentDto));
     }
 
     private static Function<DepartamentDto, Departament> toDepartament() {
