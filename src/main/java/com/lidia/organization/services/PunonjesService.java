@@ -1,9 +1,13 @@
 package com.lidia.organization.services;
 
 import com.lidia.organization.dto.PunonjesDto;
+import com.lidia.organization.dto.TaskDto;
+import com.lidia.organization.model.Projekt;
 import com.lidia.organization.model.Punonjes;
+import com.lidia.organization.model.Task;
 import com.lidia.organization.repositories.DepartamentRepository;
 import com.lidia.organization.repositories.PunonjesRepository;
+import com.lidia.organization.repositories.TaskRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +19,12 @@ public class PunonjesService {
     private final PunonjesRepository punonjesRepository;
 
     private final DepartamentRepository departamentRepository;
+    private final TaskRepository taskRepository;
 
-    public PunonjesService(PunonjesRepository punonjesRepository, DepartamentRepository departamentRepository) {
+    public PunonjesService(PunonjesRepository punonjesRepository, DepartamentRepository departamentRepository, TaskRepository taskRepository) {
         this.punonjesRepository = punonjesRepository;
         this.departamentRepository = departamentRepository;
+        this.taskRepository = taskRepository;
     }
 
     public void shtoPunonjes(PunonjesDto punonjesDto) {
@@ -38,9 +44,12 @@ public class PunonjesService {
 
     // TODO : Use dto or not?
     public void fshiPunonjes(int id){
-        // Punonjes punonjes = punonjesRepository.findById(id);
+        Punonjes punonjes = punonjesRepository.findById(id);
 
-                //set task id null
+        for (Task task : punonjes.getTaskList()) {
+            task.setPunonjes(null);
+            taskRepository.save(task);
+        }
 
         punonjesRepository.deletePunonjesById(id);
     }
@@ -58,7 +67,8 @@ public class PunonjesService {
             if(punonjes.getDepartament() != null){
                 punonjesDto.setDepartamentId(punonjes.getDepartament().getId());
             }
-         // List<TaskDto> taskDtos = punonjes.getTaskList().stream().map(toTaskDto()).toList();
+            List<TaskDto> taskDtoList = punonjes.getTaskList().stream().map(toTaskDto()).toList();
+            punonjesDto.setTaskDtoList(taskDtoList);
             return punonjesDto;
         };
     }
@@ -76,6 +86,19 @@ public class PunonjesService {
             else
                 punonjes.setDepartament(null);
             return punonjes;
+        };
+    }
+
+    private static Function<Task, TaskDto> toTaskDto() {
+        return task -> {
+            TaskDto taskDto = new TaskDto();
+            taskDto.setId(task.getId());
+            taskDto.setTitull(task.getTitull());
+            taskDto.setStatus(String.valueOf(task.getStatus()));
+            if(task.getProjekt() != null){
+                taskDto.setProjektId(task.getProjekt().getId());
+            }
+            return taskDto;
         };
     }
 }

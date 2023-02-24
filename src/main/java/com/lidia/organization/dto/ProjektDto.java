@@ -1,8 +1,12 @@
 package com.lidia.organization.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.lidia.organization.model.StatusProjekt;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class ProjektDto {
@@ -21,8 +25,7 @@ public class ProjektDto {
 
     private int departamentId;
 
-    //private List<TaskDto> taskList = new ArrayList<>();
-
+    private List<TaskDto> taskDtoList = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -70,5 +73,14 @@ public class ProjektDto {
 
     public void setDepartamentId(int departamentId) {
         this.departamentId = departamentId;
+    }
+
+    public List<TaskDto> getTaskDtoList() {
+        return taskDtoList;
+    }
+
+    @JsonIgnoreProperties({"projektId"})
+    public void setTaskDtoList(List<TaskDto> taskDtoList) {
+        this.taskDtoList = taskDtoList;
     }
 }

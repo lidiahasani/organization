@@ -1,6 +1,9 @@
 package com.lidia.organization.dto;
 
-import com.lidia.organization.model.Departament;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PunonjesDto {
 
@@ -12,7 +15,7 @@ public class PunonjesDto {
 
     private int departamentId;
 
-    // private List<Task> taskList = new ArrayList<>();
+    private List<TaskDto> taskDtoList = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -44,5 +47,14 @@ public class PunonjesDto {
 
     public void setDepartamentId(int departamentId) {
         this.departamentId = departamentId;
+    }
+
+    public List<TaskDto> getTaskDtoList() {
+        return taskDtoList;
+    }
+
+    @JsonIgnoreProperties({"punonjesId"})
+    public void setTaskDtoList(List<TaskDto> taskDtoList) {
+        this.taskDtoList = taskDtoList;
     }
 }

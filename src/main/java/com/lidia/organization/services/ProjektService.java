@@ -1,8 +1,10 @@
 package com.lidia.organization.services;
 
 import com.lidia.organization.dto.ProjektDto;
+import com.lidia.organization.dto.TaskDto;
 import com.lidia.organization.model.Projekt;
 import com.lidia.organization.model.StatusProjekt;
+import com.lidia.organization.model.Task;
 import com.lidia.organization.repositories.DepartamentRepository;
 import com.lidia.organization.repositories.ProjektRepository;
 import org.springframework.stereotype.Service;
@@ -56,7 +58,8 @@ public class ProjektService {
             if(projekt.getDepartament() != null){
                 projektDto.setDepartamentId(projekt.getDepartament().getId());
             }
-            // List<TaskDto> taskDtos = projekt.getTaskList().stream().map(toTaskDto()).toList();
+            List<TaskDto> taskDtoList = projekt.getTaskList().stream().map(toTaskDto()).toList();
+            projektDto.setTaskDtoList(taskDtoList);
             return projektDto;
         };
     }
@@ -73,4 +76,18 @@ public class ProjektService {
             return projekt;
         };
     }
+
+    private static Function<Task, TaskDto> toTaskDto() {
+        return task -> {
+            TaskDto taskDto = new TaskDto();
+            taskDto.setId(task.getId());
+            taskDto.setTitull(task.getTitull());
+            taskDto.setStatus(String.valueOf(task.getStatus()));
+            if(task.getPunonjes() != null){
+                taskDto.setPunonjesId(task.getPunonjes().getId());
+            }
+            return taskDto;
+        };
+    }
+
 }

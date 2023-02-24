@@ -44,11 +44,11 @@ public class DepartamentDto {
         this.punonjesDtos = punonjesDtos;
     }
 
-    @JsonIgnoreProperties({"departamentId"})
     public List<ProjektDto> getProjektDtos() {
         return projektDtos;
     }
 
+    @JsonIgnoreProperties({"departamentId"})
     public void setProjektDtos(List<ProjektDto> projektDtos) {
         this.projektDtos = projektDtos;
     }

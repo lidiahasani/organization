@@ -74,7 +74,6 @@ public class DepartamentService {
             projektDto.setDataNisje(projekt.getDataNisje());
             projektDto.setDataPerfundim(projekt.getDataPerfundim());
             projektDto.setStatus(String.valueOf(projekt.getStatus()));
-            // List<TaskDto> taskDtos = projekt.getTaskList().stream().map(toTaskDto()).toList();
             return projektDto;
         };
     }
