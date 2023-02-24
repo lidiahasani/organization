@@ -26,7 +26,10 @@ public class PunonjesService {
     }
 
     public PunonjesDto kerkoPunonjes(String emer){
-        return toPunonjesDto().apply(punonjesRepository.findByEmer(emer));
+        if(punonjesRepository.findByEmer(emer) != null)
+            return toPunonjesDto().apply(punonjesRepository.findByEmer(emer));
+        else
+            return null;
     }
 
     public List<PunonjesDto> lexoPunonjes(){
@@ -35,7 +38,7 @@ public class PunonjesService {
 
     // TODO : Use dto or not?
     public void fshiPunonjes(int id){
-        Punonjes punonjes = punonjesRepository.findById(id);
+        // Punonjes punonjes = punonjesRepository.findById(id);
 
                 //set task id null
 

@@ -16,7 +16,7 @@ public class Departament {
     @OneToMany(mappedBy = "departament")
     private List<Punonjes> punonjesList = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departament")
+    @OneToMany(mappedBy = "departament")
     private List<Projekt> projektList = new ArrayList<>();
 
     public int getId() {

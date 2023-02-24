@@ -1,10 +1,13 @@
 package com.lidia.organization.services;
 
 import com.lidia.organization.dto.DepartamentDto;
+import com.lidia.organization.dto.ProjektDto;
 import com.lidia.organization.dto.PunonjesDto;
 import com.lidia.organization.model.Departament;
+import com.lidia.organization.model.Projekt;
 import com.lidia.organization.model.Punonjes;
 import com.lidia.organization.repositories.DepartamentRepository;
+import com.lidia.organization.repositories.ProjektRepository;
 import com.lidia.organization.repositories.PunonjesRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -17,9 +20,12 @@ public class DepartamentService {
 
     private final PunonjesRepository punonjesRepository;
 
-    public DepartamentService(DepartamentRepository departamentRepository, PunonjesRepository punonjesRepository) {
+    private final ProjektRepository projektRepository;
+
+    public DepartamentService(DepartamentRepository departamentRepository, PunonjesRepository punonjesRepository, ProjektRepository projektRepository) {
         this.departamentRepository = departamentRepository;
         this.punonjesRepository = punonjesRepository;
+        this.projektRepository = projektRepository;
     }
 
     public void krijoDepartament(DepartamentDto departamentDto) {
@@ -27,7 +33,10 @@ public class DepartamentService {
     }
 
     public DepartamentDto kerkoDepartament(String emer){
-        return toDepartamentDto().apply(departamentRepository.findByEmer(emer));
+        if(departamentRepository.findByEmer(emer) != null)
+            return toDepartamentDto().apply(departamentRepository.findByEmer(emer));
+        else
+            return null;
     }
 
     public List<DepartamentDto> lexoDepartamentet(){
@@ -40,7 +49,9 @@ public class DepartamentService {
             departamentDto.setId(departament.getId());
             departamentDto.setEmer(departament.getEmer());
             List<PunonjesDto> punonjesDtos = departament.getPunonjesList().stream().map(toPunonjesDto()).toList();
+            List<ProjektDto> projektDtos = departament.getProjektList().stream().map(toProjektDto()).toList();
             departamentDto.setPunonjesDtos(punonjesDtos);
+            departamentDto.setProjektDtos(projektDtos);
             return departamentDto;
         };
     }
@@ -55,6 +66,19 @@ public class DepartamentService {
         };
     }
 
+    private static Function<Projekt, ProjektDto> toProjektDto() {
+        return projekt -> {
+            ProjektDto projektDto = new ProjektDto();
+            projektDto.setId(projekt.getId());
+            projektDto.setTitull(projekt.getTitull());
+            projektDto.setDataNisje(projekt.getDataNisje());
+            projektDto.setDataPerfundim(projekt.getDataPerfundim());
+            projektDto.setStatus(String.valueOf(projekt.getStatus()));
+            // List<TaskDto> taskDtos = projekt.getTaskList().stream().map(toTaskDto()).toList();
+            return projektDto;
+        };
+    }
+
     // TODO - Use dto or not?
     public void fshiDepartament(int id){
         Departament departament = departamentRepository.findById(id);
@@ -62,6 +86,11 @@ public class DepartamentService {
         for (Punonjes punonjes : departament.getPunonjesList()) {
             punonjes.setDepartament(null);
             punonjesRepository.save(punonjes);
+        }
+
+        for (Projekt projekt : departament.getProjektList()) {
+            projekt.setDepartament(null);
+            projektRepository.save(projekt);
         }
 
         departamentRepository.deleteDepartamentById(id);

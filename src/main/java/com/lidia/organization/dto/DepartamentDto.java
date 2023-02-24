@@ -17,7 +17,7 @@ public class DepartamentDto {
 
     private List<PunonjesDto> punonjesDtos = new ArrayList<>();
 
- //   private List<ProjektDto> projektList = new ArrayList<>();
+    private List<ProjektDto> projektDtos = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -42,6 +42,15 @@ public class DepartamentDto {
     @JsonIgnoreProperties({"departamentId"})
     public void setPunonjesDtos(List<PunonjesDto> punonjesDtos) {
         this.punonjesDtos = punonjesDtos;
+    }
+
+    @JsonIgnoreProperties({"departamentId"})
+    public List<ProjektDto> getProjektDtos() {
+        return projektDtos;
+    }
+
+    public void setProjektDtos(List<ProjektDto> projektDtos) {
+        this.projektDtos = projektDtos;
     }
 }
 
