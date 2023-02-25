@@ -2,7 +2,6 @@ package com.lidia.organization.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.lidia.organization.model.StatusProjekt;
 
 import java.util.ArrayList;
 import java.util.Date;
