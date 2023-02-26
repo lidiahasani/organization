@@ -1,15 +1,12 @@
 package com.lidia.organization.dto;
 
-import com.electronwill.nightconfig.core.conversion.PreserveNotNull;
-import com.electronwill.nightconfig.core.conversion.SpecNotNull;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.lang.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO : id -> Integer & try to convert into Record, for all DTOs
 public class DepartamentDto {
-
 
     private int id;
 

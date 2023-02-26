@@ -1,9 +1,9 @@
 package com.lidia.organization.services;
 
 import com.lidia.organization.dto.PunonjesDto;
+import com.lidia.organization.exception.EntityNotExistsException;
 import com.lidia.organization.model.Punonjes;
 import com.lidia.organization.model.Task;
-import com.lidia.organization.repositories.DepartamentRepository;
 import com.lidia.organization.repositories.PunonjesRepository;
 import com.lidia.organization.repositories.TaskRepository;
 import com.lidia.organization.util.Mapper;
@@ -15,14 +15,11 @@ import java.util.List;
 public class PunonjesService {
 
     private final PunonjesRepository punonjesRepository;
-    private final DepartamentRepository departamentRepository;
     private final TaskRepository taskRepository;
-
     private final Mapper mapper;
 
-    public PunonjesService(PunonjesRepository punonjesRepository, DepartamentRepository departamentRepository, TaskRepository taskRepository, Mapper mapper) {
+    public PunonjesService(PunonjesRepository punonjesRepository, TaskRepository taskRepository, Mapper mapper) {
         this.punonjesRepository = punonjesRepository;
-        this.departamentRepository = departamentRepository;
         this.taskRepository = taskRepository;
         this.mapper = mapper;
     }
@@ -32,10 +29,8 @@ public class PunonjesService {
     }
 
     public PunonjesDto kerkoPunonjes(String emer){
-        if(punonjesRepository.findByEmer(emer) != null)
-            return mapper.toPunonjesDto().apply(punonjesRepository.findByEmer(emer));
-        else
-            return null;
+        return punonjesRepository.findByEmer(emer).map(mapper.toPunonjesDto())
+                .orElseThrow(() -> new EntityNotExistsException("Punonjesi nuk ekziston."));
     }
 
     public List<PunonjesDto> lexoPunonjes(){
@@ -43,20 +38,12 @@ public class PunonjesService {
     }
 
     public void fshiPunonjes(int id){
-        Punonjes punonjes = punonjesRepository.findById(id);
-
-        for (Task task : punonjes.getTaskList()) {
-            task.setPunonjes(null);
-            taskRepository.save(task);
-        }
-
+        taskRepository.findByPunonjesId(id).forEach(task -> task.setPunonjes(null));
         punonjesRepository.deletePunonjesById(id);
     }
 
     public void ndryshoPunonjes(PunonjesDto punonjesDto){
         punonjesRepository.save(mapper.toPunonjes().apply(punonjesDto));
     }
-
-    // TODO : DEFINE MAPPINGS OUTSIDE OF THE SERVICE CLASS
 
 }

@@ -3,7 +3,10 @@ package com.lidia.organization.controllers;
 import com.lidia.organization.dto.ProjektDto;
 import com.lidia.organization.services.ProjektService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ProjektController {
@@ -27,7 +30,7 @@ public class ProjektController {
     }
 
     @GetMapping("/projekt/lexo")
-    public List<ProjektDto> lexoPunonjes(){
+    public List<ProjektDto> lexoProjektet(){
         return projektService.lexoProjektet();
     }
 
@@ -41,5 +44,17 @@ public class ProjektController {
     public void ndryshoProjekt(
             @RequestBody ProjektDto projektDto){
         projektService.ndryshoProjekt(projektDto);
+    }
+
+    @GetMapping("/projekt/lexomeKusht/{string}")
+    public List<ProjektDto> lexoProjektmeKushtTitull(
+            @PathVariable String string){
+        return projektService.lexoProjektetmeKushtTitull(string);
+    }
+
+    @GetMapping("/projekt/lexomeKushtDate")
+    public List<ProjektDto> lexoProjektmeKushtDate(
+            @RequestBody Date date){
+        return projektService.lexoProjektetmeKushtDate(date);
     }
 }

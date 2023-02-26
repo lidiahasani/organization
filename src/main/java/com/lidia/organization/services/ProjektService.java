@@ -6,16 +6,14 @@ import com.lidia.organization.repositories.ProjektRepository;
 import com.lidia.organization.util.Mapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
-
+import java.util.Optional;
 
 @Service
 public class ProjektService {
 
-    //TODO: To all services, add exceptions if entity is not found
-
     private final ProjektRepository projektRepository;
-
     private final Mapper mapper;
 
     public ProjektService(ProjektRepository projektRepository, Mapper mapper) {
@@ -28,10 +26,8 @@ public class ProjektService {
     }
 
     public ProjektDto kerkoProjekt(int id){
-        if(projektRepository.findById(id) != null)
-            return mapper.toProjektDto().apply(projektRepository.findById(id));
-        else
-            throw new EntityNotExistsException("Projekti nuk ekziston");
+        return projektRepository.findById(id).map(mapper.toProjektDto())
+                .orElseThrow(() -> new EntityNotExistsException("Projekti nuk ekziston."));
     }
 
     public List<ProjektDto> lexoProjektet(){
@@ -44,6 +40,13 @@ public class ProjektService {
 
     public void ndryshoProjekt(ProjektDto projektDto){
         projektRepository.save(mapper.toProjekt().apply(projektDto));
+    }
+
+    public List<ProjektDto> lexoProjektetmeKushtTitull(String titull){
+        return projektRepository.findAllByTitullEndingWith(titull).stream().map(mapper.toProjektDto()).toList();
+    }
+    public List<ProjektDto> lexoProjektetmeKushtDate(Date date){
+        return projektRepository.findAllByDataNisjeGreaterThan(date).stream().map(mapper.toProjektDto()).toList();
     }
 
 }

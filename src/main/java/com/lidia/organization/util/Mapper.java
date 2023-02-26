@@ -1,5 +1,6 @@
 package com.lidia.organization.util;
 
+import com.lidia.organization.dto.DepartamentDto;
 import com.lidia.organization.dto.ProjektDto;
 import com.lidia.organization.dto.PunonjesDto;
 import com.lidia.organization.dto.TaskDto;
@@ -7,6 +8,7 @@ import com.lidia.organization.model.*;
 import com.lidia.organization.repositories.DepartamentRepository;
 import com.lidia.organization.repositories.ProjektRepository;
 import com.lidia.organization.repositories.PunonjesRepository;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -27,6 +29,16 @@ public class Mapper {
         this.punonjesRepository = punonjesRepository;
     }
 
+    public RowMapper<DepartamentDto> departamentDtoRowMapper() {
+        return (r, i) -> {
+            DepartamentDto rowObject = new DepartamentDto();
+            rowObject.setId(r.getInt("id"));
+            rowObject.setEmer(r.getString("emer"));
+            //TODO : set Projekt and Punonjes for JOIN queries
+            return rowObject;
+        };
+    }
+
     public Function<Projekt, ProjektDto> toProjektDto() {
         return projekt -> {
             ProjektDto projektDto = new ProjektDto();
@@ -35,6 +47,7 @@ public class Mapper {
             projektDto.setDataNisje(projekt.getDataNisje());
             projektDto.setDataPerfundim(projekt.getDataPerfundim());
             projektDto.setStatus(String.valueOf(projekt.getStatus()));
+            //TODO : FIX
             if(projekt.getDepartament() != null){
                 projektDto.setDepartamentId(projekt.getDepartament().getId());
             }
@@ -51,8 +64,13 @@ public class Mapper {
             projekt.setTitull(projektDto.getTitull());
             projekt.setDataNisje(projektDto.getDataNisje());
             projekt.setDataPerfundim(projektDto.getDataPerfundim());
+            //TODO: Check for Invalid Enum
             projekt.setStatus(StatusProjekt.valueOf(projektDto.getStatus()));
-            projekt.setDepartament(departamentRepository.findById(projektDto.getDepartamentId()));
+            departamentRepository.findById(projektDto.getDepartamentId()).
+                    ifPresent(projekt::setDepartament);
+            //TODO : Check if departament exists, else throw exception, but it should allow null, complicated!
+//            projekt.setDepartament(departamentRepository.findById(projektDto.getDepartamentId())
+//                     .orElseThrow(() -> new EntityNotExistsException("Departamenti nuk ekziston.")));
             return projekt;
         };
     }
@@ -63,6 +81,7 @@ public class Mapper {
             taskDto.setId(task.getId());
             taskDto.setTitull(task.getTitull());
             taskDto.setStatus(String.valueOf(task.getStatus()));
+            //TODO : FIX
             if(task.getProjekt() != null){
                 taskDto.setProjektId(task.getProjekt().getId());
             }
@@ -79,16 +98,10 @@ public class Mapper {
             task.setId(taskDto.getId());
             task.setTitull(taskDto.getTitull());
             task.setStatus(StatusTask.valueOf(taskDto.getStatus()));
-            if(taskDto.getProjektId() != 0){
-                task.setProjekt(projektRepository.findById(taskDto.getProjektId()));
-            }
-            else
-                task.setProjekt(null);
-            if(taskDto.getPunonjesId() != 0){
-                task.setPunonjes(punonjesRepository.findById(taskDto.getPunonjesId()));
-            }
-            else
-                task.setProjekt(null);
+            projektRepository.findById(taskDto.getProjektId()).
+                                ifPresent(task::setProjekt);
+            punonjesRepository.findById(taskDto.getPunonjesId()).
+                    ifPresent(task::setPunonjes);
             return task;
         };
     }
@@ -99,6 +112,7 @@ public class Mapper {
             punonjesDto.setId(punonjes.getId());
             punonjesDto.setEmer(punonjes.getEmer());
             punonjesDto.setEmail(punonjes.getEmail());
+            //TODO : FIX
             if(punonjes.getDepartament() != null){
                 punonjesDto.setDepartamentId(punonjes.getDepartament().getId());
             }
@@ -114,11 +128,8 @@ public class Mapper {
             punonjes.setId(punonjesDto.getId());
             punonjes.setEmer(punonjesDto.getEmer());
             punonjes.setEmail(punonjesDto.getEmail());
-            if(punonjesDto.getDepartamentId() != 0){
-                punonjes.setDepartament(departamentRepository.findById(punonjesDto.getDepartamentId()));
-            }
-            else
-               punonjes.setDepartament(null);
+            departamentRepository.findById(punonjesDto.getDepartamentId()).
+                    ifPresent(punonjes::setDepartament);
             return punonjes;
         };
     }

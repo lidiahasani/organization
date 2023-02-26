@@ -1,8 +1,7 @@
 package com.lidia.organization.services;
 
 import com.lidia.organization.dto.TaskDto;
-import com.lidia.organization.repositories.ProjektRepository;
-import com.lidia.organization.repositories.PunonjesRepository;
+import com.lidia.organization.exception.EntityNotExistsException;
 import com.lidia.organization.repositories.TaskRepository;
 import com.lidia.organization.util.Mapper;
 import org.springframework.stereotype.Service;
@@ -12,17 +11,10 @@ import java.util.List;
 public class TaskService {
 
     private final TaskRepository taskRepository;
-
-    private final ProjektRepository projektRepository;
-
-    private final PunonjesRepository punonjesRepository;
-
     private final Mapper mapper;
 
-    public TaskService(TaskRepository taskRepository, ProjektRepository projektRepository, PunonjesRepository punonjesRepository, Mapper mapper) {
+    public TaskService(TaskRepository taskRepository, Mapper mapper) {
         this.taskRepository = taskRepository;
-        this.projektRepository = projektRepository;
-        this.punonjesRepository = punonjesRepository;
         this.mapper = mapper;
     }
 
@@ -31,10 +23,8 @@ public class TaskService {
     }
 
     public TaskDto kerkoTask(int id){
-        if(taskRepository.findById(id) != null)
-            return mapper.toTaskDto().apply(taskRepository.findById(id));
-        else
-            return null;
+        return taskRepository.findById(id).map(mapper.toTaskDto())
+                .orElseThrow(() -> new EntityNotExistsException("Tasku i kerkuar nuk ekziston."));
     }
 
     public List<TaskDto> lexoTasket(){
@@ -48,8 +38,5 @@ public class TaskService {
     public void ndryshoTask(TaskDto taskDto){
         taskRepository.save(mapper.toTask().apply(taskDto));
     }
-
-    // TODO : DEFINE MAPPINGS OUTSIDE OF THE SERVICE CLASS
-
 
 }
