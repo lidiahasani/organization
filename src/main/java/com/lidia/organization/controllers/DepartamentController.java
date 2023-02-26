@@ -5,7 +5,6 @@ import com.lidia.organization.repositories.DepartamentRepositoryJdbc;
 import com.lidia.organization.services.DepartamentService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class DepartamentController {
@@ -34,6 +33,10 @@ public class DepartamentController {
     @GetMapping("/departament/lexo")
     public List<DepartamentDto> lexoDepartamentet(){
         return departamentRepository.lexoDepartamentet();
+    }
+    @GetMapping("/departament/lexo/punonjes")
+    public List<DepartamentDto> lexo(){
+        return departamentRepository.lexo();
     }
 
     @DeleteMapping("/departament/fshi/{id}")

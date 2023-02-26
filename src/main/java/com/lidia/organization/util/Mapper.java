@@ -12,8 +12,9 @@ import com.lidia.organization.repositories.PunonjesRepository;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Optional;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 import java.util.function.Function;
 
 @Component
@@ -29,16 +30,6 @@ public class Mapper {
         this.departamentRepository = departamentRepository;
         this.projektRepository = projektRepository;
         this.punonjesRepository = punonjesRepository;
-    }
-
-    public RowMapper<DepartamentDto> departamentDtoRowMapper() {
-        return (r, i) -> {
-            DepartamentDto rowObject = new DepartamentDto();
-            rowObject.setId(r.getInt("id"));
-            rowObject.setEmer(r.getString("emer"));
-            //TODO : set Projekt and Punonjes for JOIN queries
-            return rowObject;
-        };
     }
 
     public Function<Projekt, ProjektDto> toProjektDto() {
@@ -138,6 +129,45 @@ public class Mapper {
             }
             return punonjes;
         };
+    }
+
+    public RowMapper<DepartamentDto> departamentDtoRowMapper() {
+        return (r, i) -> {
+            DepartamentDto rowObject = new DepartamentDto();
+            rowObject.setId(r.getInt("id"));
+            rowObject.setEmer(r.getString("emer"));
+            return rowObject;
+        };
+    }
+
+    public List<DepartamentDto> departamentDtoSetExtractor(ResultSet rs) throws SQLException {
+        Map<Integer, DepartamentDto> departamentMap = new LinkedHashMap<>();
+
+        while (rs.next()) {
+            Integer departamentId = rs.getInt("departament_id");
+            DepartamentDto departament = departamentMap.computeIfAbsent(departamentId, id -> {
+                DepartamentDto d = new DepartamentDto();
+                d.setId(id);
+                try {
+                    d.setEmer(rs.getString("departament_emer"));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                d.setPunonjesDtos(new ArrayList<>());
+                d.setProjektDtos(new ArrayList<>());
+                return d;
+            });
+
+            if (rs.getInt("punonjes_id") != 0) {
+                PunonjesDto punonjes = new PunonjesDto();
+                punonjes.setId(rs.getInt("punonjes_id"));
+                punonjes.setEmer(rs.getString("punonjes_emer"));
+                punonjes.setEmail(rs.getString("punonjes_email"));
+                departament.getPunonjesDtos().add(punonjes);
+            }
+        }
+
+        return new ArrayList<>(departamentMap.values());
     }
 
 }

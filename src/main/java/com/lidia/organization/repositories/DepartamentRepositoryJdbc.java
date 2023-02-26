@@ -32,11 +32,21 @@ public class DepartamentRepositoryJdbc {
         return jdbc.query(sql, mapper.departamentDtoRowMapper());
     }
 
+    public List<DepartamentDto> lexo() {
+        String sql = "SELECT d.id as departament_id, d.emer as departament_emer, " +
+                "p.id as punonjes_id, p.emer as punonjes_emer, p.email as punonjes_email " +
+                "FROM departament d " +
+                "LEFT JOIN punonjes p ON d.id = p.id_departament";
+        return jdbc.query(
+                sql, mapper::departamentDtoSetExtractor);
+    }
+
+
     public DepartamentDto kerkoDepartament(int id) {
         String sql = "SELECT * FROM departament WHERE departament.id = ?";
 
         try{
-            return jdbc.queryForObject(sql, mapper.departamentDtoRowMapper(), new Object[]{id});
+            return jdbc.queryForObject(sql, mapper.departamentDtoRowMapper(), id);
         }
         catch (DataAccessException e) {
                 throw new EntityNotExistsException("Departamenti nuk ekziston.");
