@@ -11,7 +11,7 @@ public class Task {
 
     private String titull;
     @Enumerated(EnumType.STRING)
-    private StatusTask status;
+    private StatusTask status = StatusTask.NEW;
 
     @ManyToOne
     @JoinColumn(name = "id_projekt")

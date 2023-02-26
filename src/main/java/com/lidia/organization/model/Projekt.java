@@ -21,7 +21,7 @@ public class Projekt {
     private Date dataPerfundim;
 
     @Enumerated(EnumType.STRING)
-    private StatusProjekt status;
+    private StatusProjekt status = StatusProjekt.YET_TO_START;
 
     @ManyToOne
     @JoinColumn(name = "id_departament")

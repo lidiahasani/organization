@@ -4,6 +4,7 @@ import com.lidia.organization.dto.DepartamentDto;
 import com.lidia.organization.dto.ProjektDto;
 import com.lidia.organization.dto.PunonjesDto;
 import com.lidia.organization.dto.TaskDto;
+import com.lidia.organization.exception.EntityNotExistsException;
 import com.lidia.organization.model.*;
 import com.lidia.organization.repositories.DepartamentRepository;
 import com.lidia.organization.repositories.ProjektRepository;
@@ -12,6 +13,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Component
@@ -47,10 +49,8 @@ public class Mapper {
             projektDto.setDataNisje(projekt.getDataNisje());
             projektDto.setDataPerfundim(projekt.getDataPerfundim());
             projektDto.setStatus(String.valueOf(projekt.getStatus()));
-            //TODO : FIX
-            if(projekt.getDepartament() != null){
-                projektDto.setDepartamentId(projekt.getDepartament().getId());
-            }
+            Optional.ofNullable(projekt.getDepartament())
+                    .ifPresent(departament ->projektDto.setDepartamentId(projekt.getDepartament().getId()));
             List<TaskDto> taskDtoList = projekt.getTaskList().stream().map(toTaskDto()).toList();
             projektDto.setTaskDtoList(taskDtoList);
             return projektDto;
@@ -64,13 +64,13 @@ public class Mapper {
             projekt.setTitull(projektDto.getTitull());
             projekt.setDataNisje(projektDto.getDataNisje());
             projekt.setDataPerfundim(projektDto.getDataPerfundim());
-            //TODO: Check for Invalid Enum
             projekt.setStatus(StatusProjekt.valueOf(projektDto.getStatus()));
-            departamentRepository.findById(projektDto.getDepartamentId()).
-                    ifPresent(projekt::setDepartament);
-            //TODO : Check if departament exists, else throw exception, but it should allow null, complicated!
-//            projekt.setDepartament(departamentRepository.findById(projektDto.getDepartamentId())
-//                     .orElseThrow(() -> new EntityNotExistsException("Departamenti nuk ekziston.")));
+            if(projektDto.getDepartamentId() != 0) {
+                departamentRepository.findById(projektDto.getDepartamentId()).
+                        ifPresentOrElse(projekt::setDepartament, () -> {
+                            throw new EntityNotExistsException("Departamenti nuk ekziston.");
+                        });
+            }
             return projekt;
         };
     }
@@ -81,13 +81,10 @@ public class Mapper {
             taskDto.setId(task.getId());
             taskDto.setTitull(task.getTitull());
             taskDto.setStatus(String.valueOf(task.getStatus()));
-            //TODO : FIX
-            if(task.getProjekt() != null){
-                taskDto.setProjektId(task.getProjekt().getId());
-            }
-            if(task.getPunonjes() != null){
-                taskDto.setPunonjesId(task.getPunonjes().getId());
-            }
+            Optional.ofNullable(task.getProjekt())
+                    .ifPresent(projekt -> taskDto.setProjektId(task.getProjekt().getId()));
+            Optional.ofNullable(task.getPunonjes())
+                    .ifPresent(punonjes -> taskDto.setPunonjesId(task.getPunonjes().getId()));
             return taskDto;
         };
     }
@@ -96,12 +93,19 @@ public class Mapper {
         return taskDto -> {
             Task task = new Task();
             task.setId(taskDto.getId());
-            task.setTitull(taskDto.getTitull());
             task.setStatus(StatusTask.valueOf(taskDto.getStatus()));
-            projektRepository.findById(taskDto.getProjektId()).
-                                ifPresent(task::setProjekt);
-            punonjesRepository.findById(taskDto.getPunonjesId()).
-                    ifPresent(task::setPunonjes);
+            if(taskDto.getProjektId() != 0) {
+                projektRepository.findById(taskDto.getProjektId()).
+                        ifPresentOrElse(task::setProjekt, () -> {
+                                    throw new EntityNotExistsException("Projekti nuk ekziston.");
+                        });
+            }
+            if(taskDto.getPunonjesId() != 0) {
+                punonjesRepository.findById(taskDto.getPunonjesId()).
+                        ifPresentOrElse(task::setPunonjes, () -> {
+                                    throw new EntityNotExistsException("Punonjesi nuk ekziston.");
+                        });
+            }
             return task;
         };
     }
@@ -112,10 +116,8 @@ public class Mapper {
             punonjesDto.setId(punonjes.getId());
             punonjesDto.setEmer(punonjes.getEmer());
             punonjesDto.setEmail(punonjes.getEmail());
-            //TODO : FIX
-            if(punonjes.getDepartament() != null){
-                punonjesDto.setDepartamentId(punonjes.getDepartament().getId());
-            }
+            Optional.ofNullable(punonjes.getDepartament())
+                    .ifPresent(departament -> punonjesDto.setDepartamentId(punonjes.getDepartament().getId()));
             List<TaskDto> taskDtoList = punonjes.getTaskList().stream().map(toTaskDto()).toList();
             punonjesDto.setTaskDtoList(taskDtoList);
             return punonjesDto;
@@ -128,8 +130,12 @@ public class Mapper {
             punonjes.setId(punonjesDto.getId());
             punonjes.setEmer(punonjesDto.getEmer());
             punonjes.setEmail(punonjesDto.getEmail());
-            departamentRepository.findById(punonjesDto.getDepartamentId()).
-                    ifPresent(punonjes::setDepartament);
+            if(punonjesDto.getDepartamentId() != 0) {
+                departamentRepository.findById(punonjesDto.getDepartamentId()).
+                        ifPresentOrElse(punonjes::setDepartament, () -> {
+                                    throw new EntityNotExistsException("Departamenti nuk ekziston.");
+                        });
+            }
             return punonjes;
         };
     }

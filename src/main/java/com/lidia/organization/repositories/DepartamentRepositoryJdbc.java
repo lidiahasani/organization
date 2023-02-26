@@ -11,55 +11,56 @@ import java.util.List;
 
 @Repository
 public class DepartamentRepositoryJdbc {
-        private final JdbcTemplate jdbc;
 
-        private final Mapper mapper;
-        public DepartamentRepositoryJdbc(JdbcTemplate jdbc, Mapper mapper) {
-            this.jdbc = jdbc;
-            this.mapper = mapper;
+    private final JdbcTemplate jdbc;
+
+    private final Mapper mapper;
+    public DepartamentRepositoryJdbc(JdbcTemplate jdbc, Mapper mapper) {
+        this.jdbc = jdbc;
+        this.mapper = mapper;
+    }
+
+    public void krijoDepartament(String emer) {
+        String sql =
+                "INSERT INTO departament (emer) VALUES (?)";
+
+        jdbc.update(sql, emer);
+    }
+
+    public List<DepartamentDto> lexoDepartamentet() {
+        String sql = "SELECT * FROM departament";
+        return jdbc.query(sql, mapper.departamentDtoRowMapper());
+    }
+
+    public DepartamentDto kerkoDepartament(int id) {
+        String sql = "SELECT * FROM departament WHERE departament.id = ?";
+
+        try{
+            return jdbc.queryForObject(sql, mapper.departamentDtoRowMapper(), new Object[]{id});
         }
-
-        public void krijoDepartament(String emer) {
-            String sql =
-                    "INSERT INTO departament (emer) VALUES (?)";
-
-            jdbc.update(sql, emer);
+        catch (DataAccessException e) {
+                throw new EntityNotExistsException("Departamenti nuk ekziston.");
         }
+    }
 
-        public List<DepartamentDto> lexoDepartamentet() {
-            String sql = "SELECT * FROM departament";
-            return jdbc.query(sql, mapper.departamentDtoRowMapper());
-        }
+    public void ndryshoEmer(String emer, int id){
+        String sql = "UPDATE departament SET emer = ? WHERE departament.id = ?";
 
-        public DepartamentDto kerkoDepartament(int id) {
-            String sql = "SELECT * FROM departament WHERE departament.id = ?";
+        jdbc.update(sql, emer, id);
+    }
 
-            try{
-                return jdbc.queryForObject(sql, mapper.departamentDtoRowMapper(), new Object[]{id});
-            }
-            catch (DataAccessException e) {
-                    throw new EntityNotExistsException("Departamenti nuk ekziston.");
-            }
-        }
+    public void fshiDepartament(int id){
 
-        public void ndryshoEmer(String emer, int id){
-            String sql = "UPDATE departament SET emer = ? WHERE departament.id = ?";
+        String sql = "UPDATE projekt SET id_departament = null WHERE projekt.id_departament = ?";
 
-            jdbc.update(sql, emer, id);
-        }
+        jdbc.update(sql, id);
 
-        public void fshiDepartament(int id){
+        sql = "UPDATE punonjes SET id_departament = null WHERE punonjes.id_departament = ?";
 
-            String sql = "UPDATE projekt SET id_departament = null WHERE projekt.id_departament = ?";
+        jdbc.update(sql, id);
 
-            jdbc.update(sql, id);
+        sql = "DELETE FROM departament WHERE id = ?";
 
-            sql = "UPDATE punonjes SET id_departament = null WHERE punonjes.id_departament = ?";
-
-            jdbc.update(sql, id);
-
-            sql = "DELETE FROM departament WHERE id = ?";
-
-            jdbc.update(sql, id);
-        }
+        jdbc.update(sql, id);
+    }
 }
