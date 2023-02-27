@@ -15,6 +15,8 @@ public class PunonjesDto {
 
     private String email;
 
+    private String password;
+
     private int departamentId;
 
     private List<TaskDto> taskDtoList = new ArrayList<>();
@@ -43,6 +45,14 @@ public class PunonjesDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getDepartamentId() {

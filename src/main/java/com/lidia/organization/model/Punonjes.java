@@ -16,12 +16,20 @@ public class Punonjes {
 
     private String email;
 
+    private String password;
+
     @ManyToOne
     @JoinColumn(name = "id_departament")
     private Departament departament;
 
     @OneToMany(mappedBy = "punonjes")
     private List<Task> taskList = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "punonjes_rol",
+        joinColumns = @JoinColumn(name = "id_punonjes"),
+        inverseJoinColumns = @JoinColumn(name = "id_rol"))
+    private List<Rol> role = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -47,6 +55,14 @@ public class Punonjes {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Departament getDepartament() {
         return departament;
     }
@@ -61,5 +77,13 @@ public class Punonjes {
 
     public void setTaskList(List<Task> taskList) {
         this.taskList = taskList;
+    }
+
+    public List<Rol> getRole() {
+        return role;
+    }
+
+    public void setRole(List<Rol> role) {
+        this.role = role;
     }
 }
