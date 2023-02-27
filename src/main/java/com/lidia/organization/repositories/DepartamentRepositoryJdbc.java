@@ -32,7 +32,7 @@ public class DepartamentRepositoryJdbc {
         return jdbc.query(sql, mapper.departamentDtoRowMapper());
     }
 
-    public List<DepartamentDto> lexo() {
+    public List<DepartamentDto> lexoDepartamentPunonjes() {
         String sql = "SELECT d.id as departament_id, d.emer as departament_emer, " +
                 "p.id as punonjes_id, p.emer as punonjes_emer, p.email as punonjes_email " +
                 "FROM departament d " +
@@ -40,7 +40,6 @@ public class DepartamentRepositoryJdbc {
         return jdbc.query(
                 sql, mapper::departamentDtoSetExtractor);
     }
-
 
     public DepartamentDto kerkoDepartament(int id) {
         String sql = "SELECT * FROM departament WHERE departament.id = ?";

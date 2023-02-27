@@ -2,8 +2,6 @@ package com.lidia.organization.services;
 
 import com.lidia.organization.dto.PunonjesDto;
 import com.lidia.organization.exception.EntityNotExistsException;
-import com.lidia.organization.model.Punonjes;
-import com.lidia.organization.model.Task;
 import com.lidia.organization.repositories.PunonjesRepository;
 import com.lidia.organization.repositories.TaskRepository;
 import com.lidia.organization.util.Mapper;

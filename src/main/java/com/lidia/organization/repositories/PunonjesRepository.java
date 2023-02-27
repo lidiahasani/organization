@@ -10,6 +10,8 @@ public interface PunonjesRepository extends JpaRepository<Punonjes, Integer> {
 
     Optional<Punonjes> findByEmer(String emer);
 
+    Optional<Punonjes> findByEmail(String email);
+
     Optional<Punonjes> findById(int id);
 
     @Transactional

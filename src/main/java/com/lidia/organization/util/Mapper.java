@@ -4,6 +4,7 @@ import com.lidia.organization.dto.DepartamentDto;
 import com.lidia.organization.dto.ProjektDto;
 import com.lidia.organization.dto.PunonjesDto;
 import com.lidia.organization.dto.TaskDto;
+import com.lidia.organization.exception.EmailNotUniqueException;
 import com.lidia.organization.exception.EntityNotExistsException;
 import com.lidia.organization.model.*;
 import com.lidia.organization.repositories.DepartamentRepository;
@@ -120,7 +121,12 @@ public class Mapper {
             Punonjes punonjes = new Punonjes();
             punonjes.setId(punonjesDto.getId());
             punonjes.setEmer(punonjesDto.getEmer());
-            punonjes.setEmail(punonjesDto.getEmail());
+            if(punonjesRepository.findByEmail(punonjesDto.getEmail()).isEmpty()){
+                punonjes.setEmail(punonjesDto.getEmail());
+            }
+            else{
+                throw new EmailNotUniqueException("Punonjesi me kete email ekziston.");
+            }
             if(punonjesDto.getDepartamentId() != 0) {
                 departamentRepository.findById(punonjesDto.getDepartamentId()).
                         ifPresentOrElse(punonjes::setDepartament, () -> {

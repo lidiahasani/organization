@@ -34,9 +34,10 @@ public class DepartamentController {
     public List<DepartamentDto> lexoDepartamentet(){
         return departamentRepository.lexoDepartamentet();
     }
+
     @GetMapping("/departament/lexo/punonjes")
-    public List<DepartamentDto> lexo(){
-        return departamentRepository.lexo();
+    public List<DepartamentDto> lexoDepartamentPunonjes(){
+        return departamentRepository.lexoDepartamentPunonjes();
     }
 
     @DeleteMapping("/departament/fshi/{id}")

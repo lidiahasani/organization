@@ -1,6 +1,8 @@
 package com.lidia.organization.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,8 @@ public class PunonjesDto {
         this.emer = emer;
     }
 
+    @NotNull
+    @Email
     public String getEmail() {
         return email;
     }

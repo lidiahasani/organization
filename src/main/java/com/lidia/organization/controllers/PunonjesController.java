@@ -2,6 +2,7 @@ package com.lidia.organization.controllers;
 
 import com.lidia.organization.dto.PunonjesDto;
 import com.lidia.organization.services.PunonjesService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class PunonjesController {
 
     @PostMapping("/punonjes/shto")
     public void shtoPunonjes(
-            @RequestBody PunonjesDto punonjesDto){
+            @Valid @RequestBody PunonjesDto punonjesDto){
         punonjesService.shtoPunonjes(punonjesDto);
     }
 
@@ -39,7 +40,7 @@ public class PunonjesController {
 
     @PostMapping("/punonjes/ndrysho")
     public void ndryshoPunonjes(
-            @RequestBody PunonjesDto punonjesDto){
+            @Valid @RequestBody PunonjesDto punonjesDto){
         punonjesService.ndryshoPunonjes(punonjesDto);
     }
 }
