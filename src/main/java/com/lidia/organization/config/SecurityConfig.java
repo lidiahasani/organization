@@ -50,9 +50,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
+        http.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeHttpRequests().requestMatchers("/auth/**")
+                .authorizeHttpRequests().requestMatchers("/auth/**", "/v3/api-docs/**", "/swagger-ui/**")
                 .permitAll()
                 .and()
                 .authorizeHttpRequests().requestMatchers("/**")
