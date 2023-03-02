@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO : id -> Integer & try to convert into Record, for all DTOs
 public class DepartamentDto {
 
     private int id;

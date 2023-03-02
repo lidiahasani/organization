@@ -1,16 +1,15 @@
 package com.lidia.organization.util;
 
-import com.lidia.organization.dto.DepartamentDto;
-import com.lidia.organization.dto.ProjektDto;
-import com.lidia.organization.dto.PunonjesDto;
-import com.lidia.organization.dto.TaskDto;
+import com.lidia.organization.dto.*;
 import com.lidia.organization.exception.EmailNotUniqueException;
 import com.lidia.organization.exception.EntityNotExistsException;
 import com.lidia.organization.model.*;
 import com.lidia.organization.repositories.DepartamentRepository;
 import com.lidia.organization.repositories.ProjektRepository;
 import com.lidia.organization.repositories.PunonjesRepository;
+import com.lidia.organization.repositories.RoleRepository;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
@@ -27,10 +26,16 @@ public class Mapper {
 
     private final PunonjesRepository punonjesRepository;
 
-    public Mapper(DepartamentRepository departamentRepository, ProjektRepository projektRepository, PunonjesRepository punonjesRepository) {
+    private final RoleRepository roleRepository;
+
+    private final PasswordEncoder encoder;
+
+    public Mapper(DepartamentRepository departamentRepository, ProjektRepository projektRepository, PunonjesRepository punonjesRepository, RoleRepository roleRepository, PasswordEncoder encoder) {
         this.departamentRepository = departamentRepository;
         this.projektRepository = projektRepository;
         this.punonjesRepository = punonjesRepository;
+        this.roleRepository = roleRepository;
+        this.encoder = encoder;
     }
 
     public Function<Projekt, ProjektDto> toProjektDto() {
@@ -112,27 +117,38 @@ public class Mapper {
                     .ifPresent(departament -> punonjesDto.setDepartamentId(punonjes.getDepartament().getId()));
             List<TaskDto> taskDtoList = punonjes.getTaskList().stream().map(toTaskDto()).toList();
             punonjesDto.setTaskDtoList(taskDtoList);
+            List<RoleDto> roleDtoList = punonjes.getRole().stream().map(rol -> new RoleDto(String.valueOf(rol.getEmer()))).toList();
+            punonjesDto.setRoleDtoList(roleDtoList);
             return punonjesDto;
         };
     }
 
     public Function<PunonjesDto, Punonjes> toPunonjes() {
-        return punonjesDto -> {
+        return signupRequest -> {
             Punonjes punonjes = new Punonjes();
-            punonjes.setId(punonjesDto.getId());
-            punonjes.setEmer(punonjesDto.getEmer());
-            if(punonjesRepository.findByEmail(punonjesDto.getEmail()).isEmpty()){
-                punonjes.setEmail(punonjesDto.getEmail());
-            }
-            else{
+            if (punonjesRepository.existsByEmail(signupRequest.getEmail())) {
                 throw new EmailNotUniqueException("Punonjesi me kete email ekziston.");
             }
-            if(punonjesDto.getDepartamentId() != 0) {
-                departamentRepository.findById(punonjesDto.getDepartamentId()).
+            punonjes.setEmer(signupRequest.getEmer());
+            punonjes.setEmail(signupRequest.getEmail());
+            punonjes.setPassword(encoder.encode(signupRequest.getPassword()));
+
+            if(signupRequest.getDepartamentId() != 0) {
+                departamentRepository.findById(signupRequest.getDepartamentId()).
                         ifPresentOrElse(punonjes::setDepartament, () -> {
-                                    throw new EntityNotExistsException("Departamenti nuk ekziston.");
+                            throw new EntityNotExistsException("Departamenti nuk ekziston.");
                         });
             }
+
+            List<ERole> roleNames = signupRequest.getRoleDtoList()
+                    .stream()
+                    .map(RoleDto::emer)
+                    .map(ERole::valueOf)
+                    .toList();
+
+            List<Role> roles = roleRepository.findAllByEmerIn(roleNames);
+
+            punonjes.setRole(roles);
             return punonjes;
         };
     }

@@ -14,6 +14,8 @@ public interface PunonjesRepository extends JpaRepository<Punonjes, Integer> {
 
     Optional<Punonjes> findById(int id);
 
+    boolean existsByEmail(String email);
+
     @Transactional
     void deletePunonjesById(int id);
 

@@ -1,5 +1,6 @@
 package com.lidia.organization.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -14,12 +15,14 @@ public class PunonjesDto {
     private String emer;
 
     private String email;
-
+    @JsonIgnore
     private String password;
 
     private int departamentId;
 
     private List<TaskDto> taskDtoList = new ArrayList<>();
+
+    private List<RoleDto> roleDtoList = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -71,4 +74,13 @@ public class PunonjesDto {
     public void setTaskDtoList(List<TaskDto> taskDtoList) {
         this.taskDtoList = taskDtoList;
     }
+
+    public List<RoleDto> getRoleDtoList() {
+        return roleDtoList;
+    }
+
+    public void setRoleDtoList(List<RoleDto> roleDtoList) {
+        this.roleDtoList = roleDtoList;
+    }
+
 }

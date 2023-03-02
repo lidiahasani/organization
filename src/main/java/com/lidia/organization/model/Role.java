@@ -6,13 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Rol {
+@Table(name="rol")
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String emer;
+    @Enumerated(EnumType.STRING)
+    private ERole emer;
 
     @ManyToMany(mappedBy = "role")
     private List<Punonjes> punonjes = new ArrayList<>();
@@ -25,11 +27,11 @@ public class Rol {
         this.id = id;
     }
 
-    public String getEmer() {
+    public ERole getEmer() {
         return emer;
     }
 
-    public void setEmer(String emer) {
+    public void setEmer(ERole emer) {
         this.emer = emer;
     }
 
@@ -39,5 +41,12 @@ public class Rol {
 
     public void setPunonjes(List<Punonjes> punonjes) {
         this.punonjes = punonjes;
+    }
+
+    public Role() {
+
+    }
+    public Role(ERole emer) {
+        this.emer = emer;
     }
 }

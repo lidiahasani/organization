@@ -3,6 +3,8 @@ package com.lidia.organization.controllers;
 import com.lidia.organization.dto.PunonjesDto;
 import com.lidia.organization.services.PunonjesService;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -15,10 +17,11 @@ public class PunonjesController {
         this.punonjesService = punonjesService;
     }
 
-    @PostMapping("/punonjes/shto")
-    public void shtoPunonjes(
+    @PostMapping("/punonjes/regjistro")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> regjistroPunonjes(
             @Valid @RequestBody PunonjesDto punonjesDto){
-        punonjesService.shtoPunonjes(punonjesDto);
+        return punonjesService.regjistroPunonjes(punonjesDto);
     }
 
     @GetMapping("/punonjes/kerko/{emer}")
@@ -33,12 +36,14 @@ public class PunonjesController {
     }
 
     @DeleteMapping("/punonjes/fshi/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void fshiPunonjes(
             @PathVariable("id") Integer id){
         punonjesService.fshiPunonjes(id);
     }
 
     @PostMapping("/punonjes/ndrysho")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void ndryshoPunonjes(
             @Valid @RequestBody PunonjesDto punonjesDto){
         punonjesService.ndryshoPunonjes(punonjesDto);

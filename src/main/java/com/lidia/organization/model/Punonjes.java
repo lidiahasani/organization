@@ -1,6 +1,8 @@
 package com.lidia.organization.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +28,11 @@ public class Punonjes {
     private List<Task> taskList = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @Cascade(CascadeType.ALL)
     @JoinTable(name = "punonjes_rol",
         joinColumns = @JoinColumn(name = "id_punonjes"),
         inverseJoinColumns = @JoinColumn(name = "id_rol"))
-    private List<Rol> role = new ArrayList<>();
+    private List<Role> role = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -79,11 +82,11 @@ public class Punonjes {
         this.taskList = taskList;
     }
 
-    public List<Rol> getRole() {
+    public List<Role> getRole() {
         return role;
     }
 
-    public void setRole(List<Rol> role) {
+    public void setRole(List<Role> role) {
         this.role = role;
     }
 }

@@ -4,7 +4,9 @@ import com.lidia.organization.dto.PunonjesDto;
 import com.lidia.organization.exception.EntityNotExistsException;
 import com.lidia.organization.repositories.PunonjesRepository;
 import com.lidia.organization.repositories.TaskRepository;
+import com.lidia.organization.security.repsonse.MessageResponse;
 import com.lidia.organization.util.Mapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +24,9 @@ public class PunonjesService {
         this.mapper = mapper;
     }
 
-    public void shtoPunonjes(PunonjesDto punonjesDto) {
+    public ResponseEntity<?> regjistroPunonjes(PunonjesDto punonjesDto) {
         punonjesRepository.save(mapper.toPunonjes().apply(punonjesDto));
+        return ResponseEntity.ok(new MessageResponse("Punonjesi u regjistrua me sukses!"));
     }
 
     public PunonjesDto kerkoPunonjes(String emer){
