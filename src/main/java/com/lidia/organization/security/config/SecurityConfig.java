@@ -1,7 +1,7 @@
-package com.lidia.organization.config;
+package com.lidia.organization.security.config;
 
-import com.lidia.organization.security.jwt.JwtAuthenticationFilter;
-import com.lidia.organization.services.SecurityUserDetailsService;
+import com.lidia.organization.security.filter.JwtAuthenticationFilter;
+import com.lidia.organization.services.impl.UserDetailsServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,11 +20,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final SecurityUserDetailsService userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfig(SecurityUserDetailsService userDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.userDetailsService = userDetailsService;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }

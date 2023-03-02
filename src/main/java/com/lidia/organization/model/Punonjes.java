@@ -1,8 +1,8 @@
 package com.lidia.organization.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +16,11 @@ public class Punonjes {
 
     private String emer;
 
+    @Email
+    @NotEmpty
     private String email;
 
+    @NotEmpty
     private String password;
 
     @ManyToOne
@@ -28,7 +31,6 @@ public class Punonjes {
     private List<Task> taskList = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @Cascade(CascadeType.ALL)
     @JoinTable(name = "punonjes_rol",
         joinColumns = @JoinColumn(name = "id_punonjes"),
         inverseJoinColumns = @JoinColumn(name = "id_rol"))

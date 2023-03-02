@@ -1,7 +1,8 @@
 package com.lidia.organization.controllers;
 
 import com.lidia.organization.dto.PunonjesDto;
-import com.lidia.organization.services.PunonjesService;
+import com.lidia.organization.security.dto.MessageResponse;
+import com.lidia.organization.services.impl.PunonjesServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -9,40 +10,41 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/punonjes")
 public class PunonjesController {
 
-    private final PunonjesService punonjesService;
+    private final PunonjesServiceImpl punonjesService;
 
-    public PunonjesController(PunonjesService punonjesService) {
+    public PunonjesController(PunonjesServiceImpl punonjesService) {
         this.punonjesService = punonjesService;
     }
 
-    @PostMapping("/punonjes/regjistro")
+    @PostMapping("/regjistro")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> regjistroPunonjes(
+    public ResponseEntity<MessageResponse> regjistroPunonjes(
             @Valid @RequestBody PunonjesDto punonjesDto){
         return punonjesService.regjistroPunonjes(punonjesDto);
     }
 
-    @GetMapping("/punonjes/kerko/{emer}")
+    @GetMapping("/kerko/{emer}")
     public PunonjesDto kerkoPunonjes(
             @PathVariable String emer){
         return punonjesService.kerkoPunonjes(emer);
     }
 
-    @GetMapping("/punonjes/lexo")
+    @GetMapping("/lexo")
     public List<PunonjesDto> lexoPunonjes(){
         return punonjesService.lexoPunonjes();
     }
 
-    @DeleteMapping("/punonjes/fshi/{id}")
+    @DeleteMapping("/fshi/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public void fshiPunonjes(
             @PathVariable("id") Integer id){
         punonjesService.fshiPunonjes(id);
     }
 
-    @PostMapping("/punonjes/ndrysho")
+    @PostMapping("/ndrysho")
     @PreAuthorize("hasAuthority('ADMIN')")
     public void ndryshoPunonjes(
             @Valid @RequestBody PunonjesDto punonjesDto){

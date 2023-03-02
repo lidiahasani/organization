@@ -1,4 +1,4 @@
-package com.lidia.organization.util;
+package com.lidia.organization.services;
 
 import com.lidia.organization.dto.*;
 import com.lidia.organization.exception.EmailNotUniqueException;
@@ -10,15 +10,15 @@ import com.lidia.organization.repositories.PunonjesRepository;
 import com.lidia.organization.repositories.RoleRepository;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Function;
 
-@Component
-public class Mapper {
+@Service
+public class MapperService {
 
     private final DepartamentRepository departamentRepository;
 
@@ -30,7 +30,7 @@ public class Mapper {
 
     private final PasswordEncoder encoder;
 
-    public Mapper(DepartamentRepository departamentRepository, ProjektRepository projektRepository, PunonjesRepository punonjesRepository, RoleRepository roleRepository, PasswordEncoder encoder) {
+    public MapperService(DepartamentRepository departamentRepository, ProjektRepository projektRepository, PunonjesRepository punonjesRepository, RoleRepository roleRepository, PasswordEncoder encoder) {
         this.departamentRepository = departamentRepository;
         this.projektRepository = projektRepository;
         this.punonjesRepository = punonjesRepository;
@@ -90,6 +90,7 @@ public class Mapper {
         return taskDto -> {
             Task task = new Task();
             task.setId(taskDto.getId());
+            task.setTitull(taskDto.getTitull());
             task.setStatus(StatusTask.valueOf(taskDto.getStatus()));
             if(taskDto.getProjektId() != 0) {
                 projektRepository.findById(taskDto.getProjektId()).
@@ -129,6 +130,7 @@ public class Mapper {
             if (punonjesRepository.existsByEmail(signupRequest.getEmail())) {
                 throw new EmailNotUniqueException("Punonjesi me kete email ekziston.");
             }
+
             punonjes.setEmer(signupRequest.getEmer());
             punonjes.setEmail(signupRequest.getEmail());
             punonjes.setPassword(encoder.encode(signupRequest.getPassword()));

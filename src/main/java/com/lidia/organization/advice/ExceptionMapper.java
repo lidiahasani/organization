@@ -4,6 +4,7 @@ import com.lidia.organization.exception.EmailNotUniqueException;
 import com.lidia.organization.exception.EntityNotExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -23,6 +24,11 @@ public class ExceptionMapper {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleException(IllegalArgumentException e){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<String> handleException(UsernameNotFoundException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
 }

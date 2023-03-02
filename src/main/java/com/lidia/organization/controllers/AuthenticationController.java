@@ -1,7 +1,9 @@
 package com.lidia.organization.controllers;
 
-import com.lidia.organization.security.LoginRequest;
-import com.lidia.organization.services.AuthenticationService;
+import com.lidia.organization.security.dto.LoginRequest;
+import com.lidia.organization.security.dto.MessageResponse;
+import com.lidia.organization.security.dto.UserInfoResponse;
+import com.lidia.organization.services.impl.AuthenticationServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,20 +15,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthenticationController {
 
-    private final AuthenticationService authenticationService;
+    private final AuthenticationServiceImpl authenticationService;
 
-    public AuthenticationController(AuthenticationService authenticationService) {
+    public AuthenticationController(AuthenticationServiceImpl authenticationService) {
         this.authenticationService = authenticationService;
     }
 
-    @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        return authenticationService.authenticateUser(loginRequest);
+    @PostMapping("/login")
+    public ResponseEntity<UserInfoResponse> logIn(@Valid @RequestBody LoginRequest loginRequest) {
+        return authenticationService.logIn(loginRequest);
     }
 
-    @PostMapping("/signout")
-    public ResponseEntity<?> logoutUser() {
-        return authenticationService.logoutUser();
+    @PostMapping("/logout")
+    public ResponseEntity<MessageResponse> logOut() {
+        return authenticationService.logOut();
     }
 }
 

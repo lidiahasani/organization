@@ -1,4 +1,4 @@
-package com.lidia.organization.security;
+package com.lidia.organization.security.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lidia.organization.model.Punonjes;
@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SecurityUser implements UserDetails {
+public class UserPrincipal implements UserDetails {
 
     private Integer id;
 
@@ -21,20 +21,20 @@ public class SecurityUser implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public SecurityUser(Integer id, String username, String password,
-                           Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(Integer id, String username, String password,
+                         Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.authorities = authorities;
     }
 
-    public static SecurityUser build(Punonjes punonjes) {
+    public static UserPrincipal build(Punonjes punonjes) {
         List<GrantedAuthority> authorities = punonjes.getRole().stream()
                 .map(role -> new SimpleGrantedAuthority(String.valueOf(role.getEmer())))
                 .collect(Collectors.toList());
 
-        return new SecurityUser(
+        return new UserPrincipal(
                 punonjes.getId(),
                 punonjes.getEmail(),
                 punonjes.getPassword(),

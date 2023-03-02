@@ -1,6 +1,6 @@
-package com.lidia.organization.util;
+package com.lidia.organization.security.util;
 
-import com.lidia.organization.security.SecurityUser;
+import com.lidia.organization.security.model.UserPrincipal;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
@@ -16,7 +16,6 @@ import io.jsonwebtoken.*;
 import java.security.Key;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtUtils {
@@ -43,24 +42,15 @@ public class JwtUtils {
         }
     }
 
-    public ResponseCookie generateJwtCookie(SecurityUser user) {
+    public ResponseCookie generateJwtCookie(UserPrincipal user) {
         String jwt = generateToken(user);
-        return ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(24 * 60 * 60).httpOnly(true).build();
-    }
-
-    public String generateTokenFromUsername(String username) {
-        return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .compact();
+        return ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(jwtExpirationMs).httpOnly(true).build();
     }
 
     public String generateToken(UserDetails userDetails) {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+                .toList();
 
         Map<String,Object> rolesClaim = new HashMap<>();
         rolesClaim.put("authorities", roles);
@@ -77,7 +67,7 @@ public class JwtUtils {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -118,9 +108,8 @@ public class JwtUtils {
     }
 
     public ResponseCookie getCleanJwtCookie() {
-        return ResponseCookie.from(jwtCookie, null).path("/api").build();
+        return ResponseCookie.from(jwtCookie, "").path("/api").build();
     }
-
 
 }
 

@@ -1,4 +1,4 @@
-package com.lidia.organization.security.repsonse;
+package com.lidia.organization.security.dto;
 
 import java.util.List;
 
