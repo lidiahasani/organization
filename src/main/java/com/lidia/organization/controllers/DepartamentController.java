@@ -1,7 +1,7 @@
 package com.lidia.organization.controllers;
 
 import com.lidia.organization.dto.DepartamentDto;
-import com.lidia.organization.services.impl.DepartamentServiceImpl;
+import com.lidia.organization.services.api.DepartamentService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -10,9 +10,9 @@ import java.util.List;
 @RequestMapping("/departament")
 public class DepartamentController {
 
-    private final DepartamentServiceImpl departamentService;
+    private final DepartamentService departamentService;
 
-    public DepartamentController(DepartamentServiceImpl departmentService) {
+    public DepartamentController(DepartamentService departmentService) {
         this.departamentService = departmentService;
     }
 

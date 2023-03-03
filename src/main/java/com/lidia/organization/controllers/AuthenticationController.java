@@ -3,7 +3,7 @@ package com.lidia.organization.controllers;
 import com.lidia.organization.security.dto.LoginRequest;
 import com.lidia.organization.security.dto.MessageResponse;
 import com.lidia.organization.security.dto.UserInfoResponse;
-import com.lidia.organization.services.impl.AuthenticationServiceImpl;
+import com.lidia.organization.services.api.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthenticationController {
 
-    private final AuthenticationServiceImpl authenticationService;
+    private final AuthenticationService authenticationService;
 
-    public AuthenticationController(AuthenticationServiceImpl authenticationService) {
+    public AuthenticationController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
 

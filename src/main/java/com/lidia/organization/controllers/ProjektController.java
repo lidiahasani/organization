@@ -1,7 +1,7 @@
 package com.lidia.organization.controllers;
 
 import com.lidia.organization.dto.ProjektDto;
-import com.lidia.organization.services.impl.ProjektServiceImpl;
+import com.lidia.organization.services.api.ProjektService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,9 +12,9 @@ import java.util.List;
 @RequestMapping("/projekt")
 public class ProjektController {
 
-    private final ProjektServiceImpl projektService;
+    private final ProjektService projektService;
 
-    public ProjektController(ProjektServiceImpl projektService) {
+    public ProjektController(ProjektService projektService) {
         this.projektService = projektService;
     }
 

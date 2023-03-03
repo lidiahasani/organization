@@ -2,7 +2,7 @@ package com.lidia.organization.controllers;
 
 import com.lidia.organization.dto.PunonjesDto;
 import com.lidia.organization.security.dto.MessageResponse;
-import com.lidia.organization.services.impl.PunonjesServiceImpl;
+import com.lidia.organization.services.api.PunonjesService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,9 +13,9 @@ import java.util.List;
 @RequestMapping("/punonjes")
 public class PunonjesController {
 
-    private final PunonjesServiceImpl punonjesService;
+    private final PunonjesService punonjesService;
 
-    public PunonjesController(PunonjesServiceImpl punonjesService) {
+    public PunonjesController(PunonjesService punonjesService) {
         this.punonjesService = punonjesService;
     }
 

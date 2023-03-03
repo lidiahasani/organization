@@ -1,7 +1,6 @@
 package com.lidia.organization.controllers;
 
 import com.lidia.organization.dto.TaskDto;
-import com.lidia.organization.services.impl.TaskServiceImpl;
 import com.lidia.organization.services.api.TaskService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -12,7 +11,7 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    public TaskController(TaskServiceImpl taskService) {
+    public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }
 
