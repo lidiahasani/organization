@@ -1,45 +1,63 @@
 package com.lidia.organization.services.impl;
 
 import com.lidia.organization.dto.PunonjesDto;
+import com.lidia.organization.dto.RoleDto;
+import com.lidia.organization.dto.TaskDto;
+import com.lidia.organization.exception.EmailNotUniqueException;
 import com.lidia.organization.exception.EntityNotExistsException;
-import com.lidia.organization.repositories.PunonjesRepository;
-import com.lidia.organization.repositories.TaskRepository;
+import com.lidia.organization.model.ERole;
+import com.lidia.organization.model.Punonjes;
+import com.lidia.organization.model.Role;
+import com.lidia.organization.repositories.*;
 import com.lidia.organization.security.dto.MessageResponse;
-import com.lidia.organization.services.MapperService;
 import com.lidia.organization.services.api.PunonjesService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 @Service
 public class PunonjesServiceImpl implements PunonjesService {
 
     private final PunonjesRepository punonjesRepository;
-    private final TaskRepository taskRepository;
-    private final MapperService mapper;
 
-    public PunonjesServiceImpl(PunonjesRepository punonjesRepository, TaskRepository taskRepository, MapperService mapper) {
+    private final TaskRepository taskRepository;
+
+    private final TaskServiceImpl taskService;
+
+    private final DepartamentRepository departamentRepository;
+
+    private final RoleRepository roleRepository;
+
+    private final PasswordEncoder encoder;
+
+    public PunonjesServiceImpl(PunonjesRepository punonjesRepository, TaskRepository taskRepository, TaskServiceImpl taskService, DepartamentRepository departamentRepository, RoleRepository roleRepository, PasswordEncoder encoder) {
         this.punonjesRepository = punonjesRepository;
         this.taskRepository = taskRepository;
-        this.mapper = mapper;
+        this.taskService = taskService;
+        this.departamentRepository = departamentRepository;
+        this.roleRepository = roleRepository;
+        this.encoder = encoder;
     }
 
     @Override
     public ResponseEntity<MessageResponse> regjistroPunonjes(PunonjesDto punonjesDto) {
-        punonjesRepository.save(mapper.toPunonjes().apply(punonjesDto));
+        punonjesRepository.save(toPunonjes().apply(punonjesDto));
         return ResponseEntity.ok(new MessageResponse("Punonjesi u regjistrua me sukses!"));
     }
 
     @Override
     public PunonjesDto kerkoPunonjes(String emer){
-        return punonjesRepository.findByEmer(emer).map(mapper.toPunonjesDto())
+        return punonjesRepository.findByEmer(emer).map(toPunonjesDto())
                 .orElseThrow(() -> new EntityNotExistsException("Punonjesi nuk ekziston."));
     }
 
     @Override
     public List<PunonjesDto> lexoPunonjes(){
-        return punonjesRepository.findAll().stream().map(mapper.toPunonjesDto()).toList();
+        return punonjesRepository.findAll().stream().map(toPunonjesDto()).toList();
     }
 
     @Override
@@ -50,7 +68,54 @@ public class PunonjesServiceImpl implements PunonjesService {
 
     @Override
     public void ndryshoPunonjes(PunonjesDto punonjesDto){
-        punonjesRepository.save(mapper.toPunonjes().apply(punonjesDto));
+        punonjesRepository.save(toPunonjes().apply(punonjesDto));
+    }
+
+    public Function<Punonjes, PunonjesDto> toPunonjesDto() {
+        return punonjes -> {
+            PunonjesDto punonjesDto = new PunonjesDto();
+            punonjesDto.setId(punonjes.getId());
+            punonjesDto.setEmer(punonjes.getEmer());
+            punonjesDto.setEmail(punonjes.getEmail());
+            Optional.ofNullable(punonjes.getDepartament())
+                    .ifPresent(departament -> punonjesDto.setDepartamentId(punonjes.getDepartament().getId()));
+            List<TaskDto> taskDtoList = punonjes.getTaskList().stream().map(taskService.toTaskDto()).toList();
+            punonjesDto.setTaskDtoList(taskDtoList);
+            List<RoleDto> roleDtoList = punonjes.getRole().stream().map(rol -> new RoleDto(String.valueOf(rol.getEmer()))).toList();
+            punonjesDto.setRoleDtoList(roleDtoList);
+            return punonjesDto;
+        };
+    }
+
+    public Function<PunonjesDto, Punonjes> toPunonjes() {
+        return signupRequest -> {
+            Punonjes punonjes = new Punonjes();
+            if (punonjesRepository.existsByEmail(signupRequest.getEmail())) {
+                throw new EmailNotUniqueException("Punonjesi me kete email ekziston.");
+            }
+
+            punonjes.setEmer(signupRequest.getEmer());
+            punonjes.setEmail(signupRequest.getEmail());
+            punonjes.setPassword(encoder.encode(signupRequest.getPassword()));
+
+            if(signupRequest.getDepartamentId() != 0) {
+                departamentRepository.findById(signupRequest.getDepartamentId()).
+                        ifPresentOrElse(punonjes::setDepartament, () -> {
+                            throw new EntityNotExistsException("Departamenti nuk ekziston.");
+                        });
+            }
+
+            List<ERole> roleNames = signupRequest.getRoleDtoList()
+                    .stream()
+                    .map(RoleDto::emer)
+                    .map(ERole::valueOf)
+                    .toList();
+
+            List<Role> roles = roleRepository.findAllByEmerIn(roleNames);
+
+            punonjes.setRole(roles);
+            return punonjes;
+        };
     }
 
 }
