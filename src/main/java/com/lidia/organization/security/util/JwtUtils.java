@@ -1,6 +1,5 @@
 package com.lidia.organization.security.util;
 
-import com.lidia.organization.security.model.UserPrincipal;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
@@ -42,7 +41,7 @@ public class JwtUtils {
         }
     }
 
-    public ResponseCookie generateJwtCookie(UserPrincipal user) {
+    public ResponseCookie generateJwtCookie(UserDetails user) {
         String jwt = generateToken(user);
         return ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(jwtExpirationMs).httpOnly(true).build();
     }

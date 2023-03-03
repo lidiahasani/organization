@@ -88,24 +88,24 @@ public class PunonjesServiceImpl implements PunonjesService {
     }
 
     public Function<PunonjesDto, Punonjes> toPunonjes() {
-        return signupRequest -> {
+        return punonjesDto -> {
             Punonjes punonjes = new Punonjes();
-            if (punonjesRepository.existsByEmail(signupRequest.getEmail())) {
+            if (punonjesRepository.existsByEmail(punonjesDto.getEmail())) {
                 throw new EmailNotUniqueException("Punonjesi me kete email ekziston.");
             }
 
-            punonjes.setEmer(signupRequest.getEmer());
-            punonjes.setEmail(signupRequest.getEmail());
-            punonjes.setPassword(encoder.encode(signupRequest.getPassword()));
+            punonjes.setEmer(punonjesDto.getEmer());
+            punonjes.setEmail(punonjesDto.getEmail());
+            punonjes.setPassword(encoder.encode(punonjesDto.getPassword()));
 
-            if(signupRequest.getDepartamentId() != 0) {
-                departamentRepository.findById(signupRequest.getDepartamentId()).
+            if(punonjesDto.getDepartamentId() != 0) {
+                departamentRepository.findById(punonjesDto.getDepartamentId()).
                         ifPresentOrElse(punonjes::setDepartament, () -> {
                             throw new EntityNotExistsException("Departamenti nuk ekziston.");
                         });
             }
 
-            List<ERole> roleNames = signupRequest.getRoleDtoList()
+            List<ERole> roleNames = punonjesDto.getRoleDtoList()
                     .stream()
                     .map(RoleDto::emer)
                     .map(ERole::valueOf)
