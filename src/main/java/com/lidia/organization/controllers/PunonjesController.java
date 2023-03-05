@@ -20,7 +20,7 @@ public class PunonjesController {
     }
 
     @PostMapping("/regjistro")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MessageResponse> regjistroPunonjes(
             @Valid @RequestBody PunonjesDto punonjesDto){
         return punonjesService.regjistroPunonjes(punonjesDto);
@@ -38,14 +38,14 @@ public class PunonjesController {
     }
 
     @DeleteMapping("/fshi/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void fshiPunonjes(
             @PathVariable("id") Integer id){
         punonjesService.fshiPunonjes(id);
     }
 
     @PostMapping("/ndrysho")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void ndryshoPunonjes(
             @Valid @RequestBody PunonjesDto punonjesDto){
         punonjesService.ndryshoPunonjes(punonjesDto);

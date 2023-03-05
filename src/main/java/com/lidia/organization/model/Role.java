@@ -43,10 +43,4 @@ public class Role {
         this.punonjes = punonjes;
     }
 
-    public Role() {
-
-    }
-    public Role(ERole emer) {
-        this.emer = emer;
-    }
 }

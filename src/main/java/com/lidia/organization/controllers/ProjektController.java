@@ -19,41 +19,41 @@ public class ProjektController {
     }
 
     @PostMapping("/shto")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'DEPARTMENT_MANAGER', 'PROJECT_MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DEPARTMENT_MANAGER', 'PROJECT_MANAGER')")
     public void shtoProjekt(
             @RequestBody ProjektDto projektDto){
         projektService.shtoProjekt(projektDto);
     }
 
     @GetMapping("/kerko/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'DEPARTMENT_MANAGER', 'PROJECT_MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DEPARTMENT_MANAGER', 'PROJECT_MANAGER')")
     public ProjektDto kerkoProjekt(
             @PathVariable("id") Integer id){
         return projektService.kerkoProjekt(id);
     }
 
     @GetMapping("/lexo")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'DEPARTMENT_MANAGER', 'PROJECT_MANAGER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'DEPARTMENT_MANAGER', 'PROJECT_MANAGER')")
     public List<ProjektDto> lexoProjektet(){
         return projektService.lexoProjektet();
     }
 
     @DeleteMapping("/fshi/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'DEPARTMENT_MANAGER', 'PROJECT_MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DEPARTMENT_MANAGER', 'PROJECT_MANAGER')")
     public void fshiProjekt(
             @PathVariable("id") Integer id){
         projektService.fshiProjekt(id);
     }
 
     @PostMapping("/ndrysho")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'DEPARTMENT_MANAGER', 'PROJECT_MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DEPARTMENT_MANAGER', 'PROJECT_MANAGER')")
     public void ndryshoProjekt(
             @RequestBody ProjektDto projektDto){
         projektService.ndryshoProjekt(projektDto);
     }
 
     @GetMapping("/lexomeKusht/{string}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'DEPARTMENT_MANAGER', 'PROJECT_MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DEPARTMENT_MANAGER', 'PROJECT_MANAGER')")
     public List<ProjektDto> lexoProjektmeKushtTitull(
             @PathVariable String string){
         return projektService.lexoProjektetmeKushtTitull(string);

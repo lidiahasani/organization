@@ -17,34 +17,34 @@ public class DepartamentController {
     }
 
     @PostMapping("/krijo")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void krijoDepartament(
             @RequestBody DepartamentDto departamentDto){
         departamentService.krijoDepartament(departamentDto);
     }
 
     @GetMapping("/kerko/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'DEPARTMENT_MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DEPARTMENT_MANAGER')")
     public DepartamentDto kerkoDepartament(
             @PathVariable("id") Integer id){
         return departamentService.kerkoDepartament(id);
     }
 
     @GetMapping("/lexo")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'DEPARTMENT_MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DEPARTMENT_MANAGER')")
     public List<DepartamentDto> lexoDepartamentet(){
         return departamentService.lexoDepartamentet();
     }
 
     @DeleteMapping("/fshi/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void fshiDepartament(
             @PathVariable("id") Integer id){
         departamentService.fshiDepartament(id);
     }
 
     @GetMapping("/lexo/punonjes")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'DEPARTMENT_MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DEPARTMENT_MANAGER')")
     public List<DepartamentDto> lexoDepartamentPunonjes(){
         return departamentService.lexoDepartamentPunonjes();
     }
