@@ -44,6 +44,11 @@ public class DepartamentServiceImpl implements DepartamentService {
     }
 
     @Override
+    public void ndryshoDepartament(DepartamentDto departamentDto) {
+        departamentRepository.ndryshoDepartament(departamentDto.getEmer(), departamentDto.getId());
+    }
+
+    @Override
     public void fshiDepartament(int id) {
         departamentRepository.fshiDepartament(id);
     }

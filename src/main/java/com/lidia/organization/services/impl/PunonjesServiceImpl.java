@@ -68,7 +68,7 @@ public class PunonjesServiceImpl implements PunonjesService {
 
     @Override
     public void ndryshoPunonjes(PunonjesDto punonjesDto){
-        punonjesRepository.save(toPunonjes().apply(punonjesDto));
+        punonjesRepository.save(toPunonjesUpdate().apply(punonjesDto));
     }
 
     public Function<Punonjes, PunonjesDto> toPunonjesDto() {
@@ -116,6 +116,36 @@ public class PunonjesServiceImpl implements PunonjesService {
             punonjes.setRole(roles);
             return punonjes;
         };
+    }
+
+    public Function<PunonjesDto, Punonjes> toPunonjesUpdate() {
+        return punonjesDto -> punonjesRepository.findById(punonjesDto.getId())
+                .map(
+                        punonjes -> {
+                            punonjes.setEmer(punonjesDto.getEmer());
+                            if (punonjesRepository.existsByEmailAndIdIsNot(punonjesDto.getEmail(), punonjesDto.getId())) {
+                                throw new EmailNotUniqueException("Punonjesi me kete email ekziston.");
+                            } else {
+                                punonjes.setEmail(punonjesDto.getEmail());
+                            }
+                            if (punonjesDto.getDepartamentId() != 0) {
+                                departamentRepository.findById(punonjesDto.getDepartamentId()).
+                                        ifPresentOrElse(punonjes::setDepartament, () -> {
+                                            throw new EntityNotExistsException("Departamenti nuk ekziston.");
+                                        });
+                            }
+                            List<ERole> roleNames = punonjesDto.getRoleDtoList()
+                                    .stream()
+                                    .map(RoleDto::emer)
+                                    .map(ERole::valueOf)
+                                    .toList();
+
+                            List<Role> roles = roleRepository.findAllByEmerIn(roleNames);
+
+                            punonjes.setRole(roles);
+                            return punonjes;
+                        }
+                ).orElseThrow(() -> new EntityNotExistsException("Punonjesi me id-ne e kerkuar nuk ekziston"));
     }
 
 }

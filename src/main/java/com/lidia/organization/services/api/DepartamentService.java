@@ -1,7 +1,6 @@
 package com.lidia.organization.services.api;
 
 import com.lidia.organization.dto.DepartamentDto;
-import jakarta.transaction.Transactional;
 
 import java.util.List;
 
@@ -15,6 +14,8 @@ public interface DepartamentService {
 
     DepartamentDto kerkoDepartament(int id);
 
-    @Transactional
+    void ndryshoDepartament(DepartamentDto departamentDto);
+
     void fshiDepartament(int id);
+
 }

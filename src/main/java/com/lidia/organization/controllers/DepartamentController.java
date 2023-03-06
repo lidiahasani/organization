@@ -36,6 +36,13 @@ public class DepartamentController {
         return departamentService.lexoDepartamentet();
     }
 
+    @PostMapping("/ndrysho")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DEPARTMENT_MANAGER')")
+    public void ndryshoDepartament(
+            @RequestBody DepartamentDto departamentDto){
+        departamentService.ndryshoDepartament(departamentDto);
+    }
+
     @DeleteMapping("/fshi/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public void fshiDepartament(
@@ -48,6 +55,5 @@ public class DepartamentController {
     public List<DepartamentDto> lexoDepartamentPunonjes(){
         return departamentService.lexoDepartamentPunonjes();
     }
-
 
 }

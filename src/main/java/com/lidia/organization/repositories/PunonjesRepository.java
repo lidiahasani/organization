@@ -16,6 +16,8 @@ public interface PunonjesRepository extends JpaRepository<Punonjes, Integer> {
 
     boolean existsByEmail(String email);
 
+    boolean existsByEmailAndIdIsNot(String email, int id);
+
     @Transactional
     void deletePunonjesById(int id);
 

@@ -30,9 +30,9 @@ public class DepartamentJdbcRepository {
 
     public List<DepartamentDto> lexoDepartamentet(RowMapper<DepartamentDto> rowMapper) {
         String sql = """
-                SELECT *
-                FROM departament;
-        """;
+                        SELECT *
+                        FROM departament;
+                """;
         return jdbc.query(sql, rowMapper);
     }
 
@@ -52,21 +52,32 @@ public class DepartamentJdbcRepository {
                 FROM departament
                 WHERE departament.id = ?;
                 """;
-        try{
+        try {
             return jdbc.queryForObject(sql, rowMapper, id);
-        }
-        catch (DataAccessException e) {
-                throw new EntityNotExistsException("Departamenti nuk ekziston.");
+        } catch (DataAccessException e) {
+            throw new EntityNotExistsException("Departamenti me id-ne e kerkuar nuk ekziston.");
         }
     }
 
+    public void ndryshoDepartament(String emer, int id) {
+        String sql = """
+                        UPDATE departament
+                        SET emer = ?
+                        WHERE id = ?;
+                """;
+        int rowsAffected = jdbc.update(sql, emer, id);
+
+        if (rowsAffected == 0)
+            throw new IllegalArgumentException("Update i pasuksesshem.");
+    }
+
     @Transactional
-    public void fshiDepartament(int id){
+    public void fshiDepartament(int id) {
         String sqlProjekt = """
-                UPDATE projekt
-                SET id_departament = null
-                WHERE projekt.id_departament = ?;
-        """;
+                        UPDATE projekt
+                        SET id_departament = null
+                        WHERE projekt.id_departament = ?;
+                """;
         jdbc.update(sqlProjekt, id);
 
         String sqlPunonjes = """
@@ -83,4 +94,5 @@ public class DepartamentJdbcRepository {
                 """;
         jdbc.update(sql, id);
     }
+
 }
