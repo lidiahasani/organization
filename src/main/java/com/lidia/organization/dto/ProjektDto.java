@@ -3,8 +3,8 @@ package com.lidia.organization.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ProjektDto {
@@ -13,11 +13,11 @@ public class ProjektDto {
 
     private String titull;
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
-    private Date dataNisje;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
+    private LocalDate dataNisje;
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
-    private Date dataPerfundim;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
+    private LocalDate dataPerfundim;
 
     private String status;
 
@@ -41,19 +41,19 @@ public class ProjektDto {
         this.titull = titull;
     }
 
-    public Date getDataNisje() {
+    public LocalDate getDataNisje() {
         return dataNisje;
     }
 
-    public void setDataNisje(Date dataNisje) {
+    public void setDataNisje(LocalDate dataNisje) {
         this.dataNisje = dataNisje;
     }
 
-    public Date getDataPerfundim() {
+    public LocalDate getDataPerfundim() {
         return dataPerfundim;
     }
 
-    public void setDataPerfundim(Date dataPerfundim) {
+    public void setDataPerfundim(LocalDate dataPerfundim) {
         this.dataPerfundim = dataPerfundim;
     }
 

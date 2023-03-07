@@ -1,8 +1,9 @@
 package com.lidia.organization.model;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -15,10 +16,10 @@ public class Projekt {
     private String titull;
 
     @Column(name = "data_nisje")
-    private Date dataNisje;
+    private LocalDate dataNisje;
 
     @Column(name = "data_perfundim")
-    private Date dataPerfundim;
+    private LocalDate dataPerfundim;
 
     @Enumerated(EnumType.STRING)
     private StatusProjekt status = StatusProjekt.YET_TO_START;
@@ -46,19 +47,19 @@ public class Projekt {
         this.titull = titull;
     }
 
-    public Date getDataNisje() {
+    public LocalDate getDataNisje() {
         return dataNisje;
     }
 
-    public void setDataNisje(Date dataNisje) {
+    public void setDataNisje(LocalDate dataNisje) {
         this.dataNisje = dataNisje;
     }
 
-    public Date getDataPerfundim() {
+    public LocalDate getDataPerfundim() {
         return dataPerfundim;
     }
 
-    public void setDataPerfundim(Date dataPerfundim) {
+    public void setDataPerfundim(LocalDate dataPerfundim) {
         this.dataPerfundim = dataPerfundim;
     }
 

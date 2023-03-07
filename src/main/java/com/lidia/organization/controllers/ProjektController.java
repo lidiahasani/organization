@@ -2,10 +2,11 @@ package com.lidia.organization.controllers;
 
 import com.lidia.organization.dto.ProjektDto;
 import com.lidia.organization.services.api.ProjektService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -19,10 +20,11 @@ public class ProjektController {
     }
 
     @PostMapping("/shto")
+    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('ADMIN', 'DEPARTMENT_MANAGER', 'PROJECT_MANAGER')")
-    public void shtoProjekt(
+    public ProjektDto shtoProjekt(
             @RequestBody ProjektDto projektDto){
-        projektService.shtoProjekt(projektDto);
+        return projektService.shtoOseNdryshoProjekt(projektDto);
     }
 
     @GetMapping("/kerko/{id}")
@@ -39,6 +41,7 @@ public class ProjektController {
     }
 
     @DeleteMapping("/fshi/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyRole('ADMIN', 'DEPARTMENT_MANAGER', 'PROJECT_MANAGER')")
     public void fshiProjekt(
             @PathVariable("id") Integer id){
@@ -47,9 +50,9 @@ public class ProjektController {
 
     @PostMapping("/ndrysho")
     @PreAuthorize("hasAnyRole('ADMIN', 'DEPARTMENT_MANAGER', 'PROJECT_MANAGER')")
-    public void ndryshoProjekt(
+    public ProjektDto ndryshoProjekt(
             @RequestBody ProjektDto projektDto){
-        projektService.ndryshoProjekt(projektDto);
+        return projektService.shtoOseNdryshoProjekt(projektDto);
     }
 
     @GetMapping("/lexomeKusht/{string}")
@@ -62,7 +65,7 @@ public class ProjektController {
     @GetMapping("/lexomeKushtDate")
     @PreAuthorize("hasAnyRole('ADMIN', 'DEPARTMENT_MANAGER', 'PROJECT_MANAGER')")
     public List<ProjektDto> lexoProjektmeKushtDate(
-            @RequestBody Date date){
+            @RequestBody LocalDate date){
         return projektService.lexoProjektetmeKushtDate(date);
     }
 }

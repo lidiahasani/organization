@@ -2,12 +2,12 @@ package com.lidia.organization.services.api;
 
 import com.lidia.organization.dto.ProjektDto;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ProjektService {
 
-    void shtoProjekt(ProjektDto projektDto);
+    ProjektDto shtoOseNdryshoProjekt(ProjektDto projektDto);
 
     ProjektDto kerkoProjekt(int id);
 
@@ -15,9 +15,7 @@ public interface ProjektService {
 
     void fshiProjekt(int id);
 
-    void ndryshoProjekt(ProjektDto projektDto);
-
     List<ProjektDto> lexoProjektetmeKushtTitull(String titull);
 
-    List<ProjektDto> lexoProjektetmeKushtDate(Date date);
+    List<ProjektDto> lexoProjektetmeKushtDate(LocalDate date);
 }

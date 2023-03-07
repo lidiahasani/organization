@@ -1,8 +1,10 @@
 package com.lidia.organization.exception;
 
-public class EmailNotUniqueException extends RuntimeException{
+public class EmailNotUniqueException extends RuntimeException {
 
-    public EmailNotUniqueException(String message) {
-        super(message);
+    private static final String MESSAGE = "Punonjesi me kete email ekziston.";
+
+    public EmailNotUniqueException() {
+        super(MESSAGE);
     }
 }

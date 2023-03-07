@@ -1,14 +1,12 @@
 package com.lidia.organization.services.api;
 
 import com.lidia.organization.dto.PunonjesDto;
-import com.lidia.organization.security.dto.MessageResponse;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface PunonjesService {
 
-    ResponseEntity<MessageResponse> regjistroPunonjes(PunonjesDto punonjesDto);
+    void regjistroPunonjes(PunonjesDto punonjesDto);
 
     PunonjesDto kerkoPunonjes(String emer);
 
@@ -16,5 +14,5 @@ public interface PunonjesService {
 
     void fshiPunonjes(int id);
 
-    void ndryshoPunonjes(PunonjesDto punonjesDto);
+    PunonjesDto ndryshoPunonjes(PunonjesDto punonjesDto);
 }

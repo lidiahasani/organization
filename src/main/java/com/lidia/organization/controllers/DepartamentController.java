@@ -2,6 +2,7 @@ package com.lidia.organization.controllers;
 
 import com.lidia.organization.dto.DepartamentDto;
 import com.lidia.organization.services.api.DepartamentService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -44,6 +45,7 @@ public class DepartamentController {
     }
 
     @DeleteMapping("/fshi/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ADMIN')")
     public void fshiDepartament(
             @PathVariable("id") Integer id){

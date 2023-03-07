@@ -2,6 +2,7 @@ package com.lidia.organization.controllers;
 
 import com.lidia.organization.dto.TaskDto;
 import com.lidia.organization.services.api.TaskService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -16,9 +17,10 @@ public class TaskController {
     }
 
     @PostMapping("/shto")
-    public void shtoTask(
+    @ResponseStatus(HttpStatus.CREATED)
+    public TaskDto shtoTask(
             @RequestBody TaskDto taskDto){
-        taskService.shtoTask(taskDto);
+        return taskService.shtoOseNdryshoTask(taskDto);
     }
 
     @GetMapping("/kerko/{id}")
@@ -33,14 +35,15 @@ public class TaskController {
     }
 
     @DeleteMapping("/fshi/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void fshiTask(
             @PathVariable("id") Integer id){
         taskService.fshiTask(id);
     }
 
     @PostMapping("/ndrysho")
-    public void ndryshoTask(
+    public TaskDto ndryshoTask(
             @RequestBody TaskDto taskDto){
-        taskService.ndryshoTask(taskDto);
+        return taskService.shtoOseNdryshoTask(taskDto);
     }
 }

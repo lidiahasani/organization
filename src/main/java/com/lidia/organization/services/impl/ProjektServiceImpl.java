@@ -10,7 +10,7 @@ import com.lidia.organization.repositories.ProjektRepository;
 import com.lidia.organization.services.api.ProjektService;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -31,8 +31,9 @@ public class ProjektServiceImpl implements ProjektService {
     }
 
     @Override
-    public void shtoProjekt(ProjektDto projektDto){
-        projektRepository.save(toProjekt().apply(projektDto));
+    public ProjektDto shtoOseNdryshoProjekt(ProjektDto projektDto){
+        var projekt = projektRepository.save(toProjekt().apply(projektDto));
+        return toProjektDto().apply(projekt);
     }
 
     @Override
@@ -52,17 +53,12 @@ public class ProjektServiceImpl implements ProjektService {
     }
 
     @Override
-    public void ndryshoProjekt(ProjektDto projektDto){
-        projektRepository.save(toProjekt().apply(projektDto));
-    }
-
-    @Override
     public List<ProjektDto> lexoProjektetmeKushtTitull(String titull){
         return projektRepository.findAllByTitullEndingWith(titull).stream().map(toProjektDto()).toList();
     }
 
     @Override
-    public List<ProjektDto> lexoProjektetmeKushtDate(Date date){
+    public List<ProjektDto> lexoProjektetmeKushtDate(LocalDate date){
         return projektRepository.findAllByDataNisjeGreaterThan(date).stream().map(toProjektDto()).toList();
     }
 

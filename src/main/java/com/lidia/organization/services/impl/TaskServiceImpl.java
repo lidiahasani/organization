@@ -29,8 +29,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void shtoTask(TaskDto taskDto) {
-        taskRepository.save(toTask().apply(taskDto));
+    public TaskDto shtoOseNdryshoTask(TaskDto taskDto) {
+        var task = taskRepository.save(toTask().apply(taskDto));
+        return toTaskDto().apply(task);
     }
 
     @Override
@@ -47,11 +48,6 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void fshiTask(int id){
         taskRepository.deleteTaskById(id);
-    }
-
-    @Override
-    public void ndryshoTask(TaskDto taskDto){
-        taskRepository.save(toTask().apply(taskDto));
     }
 
     public Function<Task, TaskDto> toTaskDto() {

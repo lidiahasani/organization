@@ -9,9 +9,7 @@ import com.lidia.organization.model.ERole;
 import com.lidia.organization.model.Punonjes;
 import com.lidia.organization.model.Role;
 import com.lidia.organization.repositories.*;
-import com.lidia.organization.security.dto.MessageResponse;
 import com.lidia.organization.services.api.PunonjesService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -44,9 +42,8 @@ public class PunonjesServiceImpl implements PunonjesService {
     }
 
     @Override
-    public ResponseEntity<MessageResponse> regjistroPunonjes(PunonjesDto punonjesDto) {
+    public void regjistroPunonjes(PunonjesDto punonjesDto) {
         punonjesRepository.save(toPunonjes().apply(punonjesDto));
-        return ResponseEntity.ok(new MessageResponse("Punonjesi u regjistrua me sukses!"));
     }
 
     @Override
@@ -62,13 +59,17 @@ public class PunonjesServiceImpl implements PunonjesService {
 
     @Override
     public void fshiPunonjes(int id){
-        taskRepository.findByPunonjesId(id).forEach(task -> task.setPunonjes(null));
+        taskRepository.findByPunonjesId(id).forEach(task -> {
+            task.setPunonjes(null);
+            taskRepository.save(task);
+        });
         punonjesRepository.deletePunonjesById(id);
     }
 
     @Override
-    public void ndryshoPunonjes(PunonjesDto punonjesDto){
-        punonjesRepository.save(toPunonjesUpdate().apply(punonjesDto));
+    public PunonjesDto ndryshoPunonjes(PunonjesDto punonjesDto){
+        var punonjes = punonjesRepository.save(toPunonjesUpdate().apply(punonjesDto));
+        return toPunonjesDto().apply(punonjes);
     }
 
     public Function<Punonjes, PunonjesDto> toPunonjesDto() {
@@ -91,7 +92,7 @@ public class PunonjesServiceImpl implements PunonjesService {
         return punonjesDto -> {
             Punonjes punonjes = new Punonjes();
             if (punonjesRepository.existsByEmail(punonjesDto.getEmail())) {
-                throw new EmailNotUniqueException("Punonjesi me kete email ekziston.");
+                throw new EmailNotUniqueException();
             }
 
             punonjes.setEmer(punonjesDto.getEmer());
@@ -124,7 +125,7 @@ public class PunonjesServiceImpl implements PunonjesService {
                         punonjes -> {
                             punonjes.setEmer(punonjesDto.getEmer());
                             if (punonjesRepository.existsByEmailAndIdIsNot(punonjesDto.getEmail(), punonjesDto.getId())) {
-                                throw new EmailNotUniqueException("Punonjesi me kete email ekziston.");
+                                throw new EmailNotUniqueException();
                             } else {
                                 punonjes.setEmail(punonjesDto.getEmail());
                             }

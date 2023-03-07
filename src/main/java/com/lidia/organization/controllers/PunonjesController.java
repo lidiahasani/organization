@@ -1,9 +1,9 @@
 package com.lidia.organization.controllers;
 
 import com.lidia.organization.dto.PunonjesDto;
-import com.lidia.organization.security.dto.MessageResponse;
 import com.lidia.organization.services.api.PunonjesService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +21,10 @@ public class PunonjesController {
 
     @PostMapping("/regjistro")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<MessageResponse> regjistroPunonjes(
+    public ResponseEntity<String> regjistroPunonjes(
             @Valid @RequestBody PunonjesDto punonjesDto){
-        return punonjesService.regjistroPunonjes(punonjesDto);
+        punonjesService.regjistroPunonjes(punonjesDto);
+        return ResponseEntity.ok("Punonjesi u regjistrua me sukses!");
     }
 
     @GetMapping("/kerko/{emer}")
@@ -38,6 +39,7 @@ public class PunonjesController {
     }
 
     @DeleteMapping("/fshi/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ADMIN')")
     public void fshiPunonjes(
             @PathVariable("id") Integer id){
@@ -46,8 +48,8 @@ public class PunonjesController {
 
     @PostMapping("/ndrysho")
     @PreAuthorize("hasRole('ADMIN')")
-    public void ndryshoPunonjes(
+    public PunonjesDto ndryshoPunonjes(
             @Valid @RequestBody PunonjesDto punonjesDto){
-        punonjesService.ndryshoPunonjes(punonjesDto);
+        return punonjesService.ndryshoPunonjes(punonjesDto);
     }
 }
