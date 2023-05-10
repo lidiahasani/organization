@@ -9,17 +9,17 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String titull;
+    private String title;
     @Enumerated(EnumType.STRING)
-    private StatusTask status = StatusTask.NEW;
+    private TaskStatus status = TaskStatus.NEW;
 
     @ManyToOne
-    @JoinColumn(name = "id_projekt")
-    private Projekt projekt;
+    @JoinColumn(name = "id_project")
+    private Project project;
 
     @ManyToOne
-    @JoinColumn(name = "id_punonjes")
-    private Punonjes punonjes;
+    @JoinColumn(name = "id_employee")
+    private Employee employee;
 
     public int getId() {
         return id;
@@ -29,35 +29,35 @@ public class Task {
         this.id = id;
     }
 
-    public String getTitull() {
-        return titull;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitull(String titull) {
-        this.titull = titull;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public StatusTask getStatus() {
+    public TaskStatus getStatus() {
         return status;
     }
 
-    public void setStatus(StatusTask status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
     }
 
-    public Projekt getProjekt() {
-        return projekt;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjekt(Projekt projekt) {
-        this.projekt = projekt;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
-    public Punonjes getPunonjes() {
-        return punonjes;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setPunonjes(Punonjes punonjes) {
-        this.punonjes = punonjes;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 }

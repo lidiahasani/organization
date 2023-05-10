@@ -6,17 +6,17 @@ import jakarta.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PunonjesDto {
+public class EmployeeDto {
 
     private int id;
 
-    private String emer;
+    private String name;
 
     private String email;
 
     private String password;
 
-    private int departamentId;
+    private int departmentId;
 
     private List<TaskDto> taskDtoList = new ArrayList<>();
 
@@ -30,12 +30,12 @@ public class PunonjesDto {
         this.id = id;
     }
 
-    public String getEmer() {
-        return emer;
+    public String getName() {
+        return name;
     }
 
-    public void setEmer(String emer) {
-        this.emer = emer;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Email
@@ -55,19 +55,19 @@ public class PunonjesDto {
         this.password = password;
     }
 
-    public int getDepartamentId() {
-        return departamentId;
+    public int getDepartmentId() {
+        return departmentId;
     }
 
-    public void setDepartamentId(int departamentId) {
-        this.departamentId = departamentId;
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
     }
 
     public List<TaskDto> getTaskDtoList() {
         return taskDtoList;
     }
 
-    @JsonIgnoreProperties({"punonjesId"})
+    @JsonIgnoreProperties({"employeeId"})
     public void setTaskDtoList(List<TaskDto> taskDtoList) {
         this.taskDtoList = taskDtoList;
     }

@@ -1,7 +1,7 @@
 package com.lidia.organization.security.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.lidia.organization.model.Punonjes;
+import com.lidia.organization.model.Employee;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,15 +29,15 @@ public class UserPrincipal implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserPrincipal build(Punonjes punonjes) {
-        List<GrantedAuthority> authorities = punonjes.getRole().stream()
-                .map(role -> new SimpleGrantedAuthority(String.valueOf(role.getEmer())))
+    public static UserPrincipal build(Employee employee) {
+        List<GrantedAuthority> authorities = employee.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(String.valueOf(role.getName())))
                 .collect(Collectors.toList());
 
         return new UserPrincipal(
-                punonjes.getId(),
-                punonjes.getEmail(),
-                punonjes.getPassword(),
+                employee.getId(),
+                employee.getEmail(),
+                employee.getPassword(),
                 authorities);
     }
 

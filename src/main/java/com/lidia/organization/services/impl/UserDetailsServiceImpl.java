@@ -1,7 +1,7 @@
 package com.lidia.organization.services.impl;
 
-import com.lidia.organization.model.Punonjes;
-import com.lidia.organization.repositories.PunonjesRepository;
+import com.lidia.organization.model.Employee;
+import com.lidia.organization.repositories.EmployeeRepository;
 import com.lidia.organization.security.model.UserPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,17 +12,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final PunonjesRepository punonjesRepository;
+    private final EmployeeRepository employeeRepository;
 
-    public UserDetailsServiceImpl(PunonjesRepository punonjesRepository) {
-        this.punonjesRepository = punonjesRepository;
+    public UserDetailsServiceImpl(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) {
-        Punonjes user = punonjesRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Punonjesi nuk u gjend me kete email: " + email));
+        Employee user = employeeRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Employee could not be found with this email: " + email));
 
         return UserPrincipal.build(user);
     }

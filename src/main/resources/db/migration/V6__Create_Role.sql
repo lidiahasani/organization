@@ -1,5 +1,5 @@
-create table rol
+create table role
 (
     id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    emer VARCHAR(50) NOT NULL
+    name VARCHAR(50) NOT NULL
 );

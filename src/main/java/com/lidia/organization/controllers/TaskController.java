@@ -16,34 +16,35 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @PostMapping("/shto")
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public TaskDto shtoTask(
+    public TaskDto create(
             @RequestBody TaskDto taskDto){
-        return taskService.shtoOseNdryshoTask(taskDto);
+        return taskService.createOrUpdate(taskDto);
     }
 
-    @GetMapping("/kerko/{id}")
-    public TaskDto kerkoTask(
+    @GetMapping("/read/{id}")
+    public TaskDto read(
             @PathVariable("id") Integer id){
-        return taskService.kerkoTask(id);
+        return taskService.read(id);
     }
 
-    @GetMapping("/lexo")
-    public List<TaskDto> lexoTask(){
-        return taskService.lexoTasket();
+    @GetMapping("/read")
+    public List<TaskDto> read(){
+        return taskService.read();
     }
 
-    @DeleteMapping("/fshi/{id}")
+    @PostMapping("/update")
+    public TaskDto update(
+            @RequestBody TaskDto taskDto){
+        return taskService.createOrUpdate(taskDto);
+    }
+
+    @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void fshiTask(
+    public void delete(
             @PathVariable("id") Integer id){
-        taskService.fshiTask(id);
+        taskService.delete(id);
     }
 
-    @PostMapping("/ndrysho")
-    public TaskDto ndryshoTask(
-            @RequestBody TaskDto taskDto){
-        return taskService.shtoOseNdryshoTask(taskDto);
-    }
 }

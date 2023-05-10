@@ -37,7 +37,7 @@ public class AuthenticationController {
     public ResponseEntity<String> logOut() {
         ResponseCookie cookie = authenticationService.logOut();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body("Sign Out i suksesshem!");
+                .body("You've been signed out!");
     }
 }
 

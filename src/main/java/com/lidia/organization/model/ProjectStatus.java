@@ -1,5 +1,5 @@
 package com.lidia.organization.model;
 
-public enum StatusProjekt {
+public enum ProjectStatus {
     YET_TO_START, ACTIVE, COMPLETED
 }

@@ -2,10 +2,10 @@ package com.lidia.organization.services.impl;
 
 import com.lidia.organization.dto.TaskDto;
 import com.lidia.organization.exception.EntityNotExistsException;
-import com.lidia.organization.model.StatusTask;
+import com.lidia.organization.model.TaskStatus;
 import com.lidia.organization.model.Task;
-import com.lidia.organization.repositories.ProjektRepository;
-import com.lidia.organization.repositories.PunonjesRepository;
+import com.lidia.organization.repositories.ProjectRepository;
+import com.lidia.organization.repositories.EmployeeRepository;
 import com.lidia.organization.repositories.TaskRepository;
 import com.lidia.organization.services.api.TaskService;
 import org.springframework.stereotype.Service;
@@ -18,35 +18,35 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
 
-    private final ProjektRepository projektRepository;
+    private final ProjectRepository projectRepository;
 
-    private final PunonjesRepository punonjesRepository;
+    private final EmployeeRepository employeeRepository;
 
-    public TaskServiceImpl(TaskRepository taskRepository, ProjektRepository projektRepository, PunonjesRepository punonjesRepository) {
+    public TaskServiceImpl(TaskRepository taskRepository, ProjectRepository projectRepository, EmployeeRepository employeeRepository) {
         this.taskRepository = taskRepository;
-        this.projektRepository = projektRepository;
-        this.punonjesRepository = punonjesRepository;
+        this.projectRepository = projectRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
-    public TaskDto shtoOseNdryshoTask(TaskDto taskDto) {
+    public TaskDto createOrUpdate(TaskDto taskDto) {
         var task = taskRepository.save(toTask().apply(taskDto));
         return toTaskDto().apply(task);
     }
 
     @Override
-    public TaskDto kerkoTask(int id){
+    public TaskDto read(int id){
         return taskRepository.findById(id).map(toTaskDto())
-                .orElseThrow(() -> new EntityNotExistsException("Tasku i kerkuar nuk ekziston."));
+                .orElseThrow(() -> new EntityNotExistsException("Task does not exist."));
     }
 
     @Override
-    public List<TaskDto> lexoTasket(){
+    public List<TaskDto> read(){
         return taskRepository.findAll().stream().map(toTaskDto()).toList();
     }
 
     @Override
-    public void fshiTask(int id){
+    public void delete(int id){
         taskRepository.deleteTaskById(id);
     }
 
@@ -54,12 +54,12 @@ public class TaskServiceImpl implements TaskService {
         return task -> {
             TaskDto taskDto = new TaskDto();
             taskDto.setId(task.getId());
-            taskDto.setTitull(task.getTitull());
+            taskDto.setTitle(task.getTitle());
             taskDto.setStatus(String.valueOf(task.getStatus()));
-            Optional.ofNullable(task.getProjekt())
-                    .ifPresent(projekt -> taskDto.setProjektId(task.getProjekt().getId()));
-            Optional.ofNullable(task.getPunonjes())
-                    .ifPresent(punonjes -> taskDto.setPunonjesId(task.getPunonjes().getId()));
+            Optional.ofNullable(task.getProject())
+                    .ifPresent(project -> taskDto.setProjectId(task.getProject().getId()));
+            Optional.ofNullable(task.getEmployee())
+                    .ifPresent(employee -> taskDto.setEmployeeId(task.getEmployee().getId()));
             return taskDto;
         };
     }
@@ -68,18 +68,18 @@ public class TaskServiceImpl implements TaskService {
         return taskDto -> {
             Task task = new Task();
             task.setId(taskDto.getId());
-            task.setTitull(taskDto.getTitull());
-            task.setStatus(StatusTask.valueOf(taskDto.getStatus()));
-            if(taskDto.getProjektId() != 0) {
-                projektRepository.findById(taskDto.getProjektId()).
-                        ifPresentOrElse(task::setProjekt, () -> {
-                            throw new EntityNotExistsException("Projekti nuk ekziston.");
+            task.setTitle(taskDto.getTitle());
+            task.setStatus(TaskStatus.valueOf(taskDto.getStatus()));
+            if(taskDto.getProjectId() != 0) {
+                projectRepository.findById(taskDto.getProjectId()).
+                        ifPresentOrElse(task::setProject, () -> {
+                            throw new EntityNotExistsException("Project does not exist.");
                         });
             }
-            if(taskDto.getPunonjesId() != 0) {
-                punonjesRepository.findById(taskDto.getPunonjesId()).
-                        ifPresentOrElse(task::setPunonjes, () -> {
-                            throw new EntityNotExistsException("Punonjesi nuk ekziston.");
+            if(taskDto.getEmployeeId() != 0) {
+                employeeRepository.findById(taskDto.getEmployeeId()).
+                        ifPresentOrElse(task::setEmployee, () -> {
+                            throw new EntityNotExistsException("Employee does not exist.");
                         });
             }
             return task;

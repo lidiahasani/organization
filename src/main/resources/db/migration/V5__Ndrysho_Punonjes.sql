@@ -1,1 +1,0 @@
-ALTER TABLE punonjes ADD password VARCHAR(50) NOT NULL;

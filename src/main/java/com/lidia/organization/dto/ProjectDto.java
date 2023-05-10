@@ -7,21 +7,21 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjektDto {
+public class ProjectDto {
 
     private int id;
 
-    private String titull;
+    private String title;
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
-    private LocalDate dataNisje;
+    private LocalDate startDate;
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
-    private LocalDate dataPerfundim;
+    private LocalDate endDate;
 
     private String status;
 
-    private int departamentId;
+    private int departmentId;
 
     private List<TaskDto> taskDtoList = new ArrayList<>();
 
@@ -33,28 +33,28 @@ public class ProjektDto {
         this.id = id;
     }
 
-    public String getTitull() {
-        return titull;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitull(String titull) {
-        this.titull = titull;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public LocalDate getDataNisje() {
-        return dataNisje;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setDataNisje(LocalDate dataNisje) {
-        this.dataNisje = dataNisje;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
-    public LocalDate getDataPerfundim() {
-        return dataPerfundim;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
-    public void setDataPerfundim(LocalDate dataPerfundim) {
-        this.dataPerfundim = dataPerfundim;
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     public String getStatus() {
@@ -65,19 +65,19 @@ public class ProjektDto {
         this.status = status;
     }
 
-    public int getDepartamentId() {
-        return departamentId;
+    public int getDepartmentId() {
+        return departmentId;
     }
 
-    public void setDepartamentId(int departamentId) {
-        this.departamentId = departamentId;
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
     }
 
     public List<TaskDto> getTaskDtoList() {
         return taskDtoList;
     }
 
-    @JsonIgnoreProperties({"projektId"})
+    @JsonIgnoreProperties({"projectId"})
     public void setTaskDtoList(List<TaskDto> taskDtoList) {
         this.taskDtoList = taskDtoList;
     }

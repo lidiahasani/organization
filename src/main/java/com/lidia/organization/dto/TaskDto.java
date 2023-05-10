@@ -4,13 +4,13 @@ public class TaskDto {
 
     private int id;
 
-    private String titull;
+    private String title;
 
     private String status;
 
-    private int projektId;
+    private int projectId;
 
-    private int punonjesId;
+    private int employeeId;
 
     public int getId() {
         return id;
@@ -20,12 +20,12 @@ public class TaskDto {
         this.id = id;
     }
 
-    public String getTitull() {
-        return titull;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitull(String titull) {
-        this.titull = titull;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getStatus() {
@@ -36,19 +36,19 @@ public class TaskDto {
         this.status = status;
     }
 
-    public int getProjektId() {
-        return projektId;
+    public int getProjectId() {
+        return projectId;
     }
 
-    public void setProjektId(int projektId) {
-        this.projektId = projektId;
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
     }
 
-    public int getPunonjesId() {
-        return punonjesId;
+    public int getEmployeeId() {
+        return employeeId;
     }
 
-    public void setPunonjesId(int punonjesId) {
-        this.punonjesId = punonjesId;
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
     }
 }

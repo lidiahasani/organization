@@ -6,12 +6,12 @@ import java.util.List;
 
 public interface TaskService {
 
-    TaskDto shtoOseNdryshoTask(TaskDto taskDto);
+    TaskDto createOrUpdate(TaskDto taskDto);
 
-    TaskDto kerkoTask(int id);
+    TaskDto read(int id);
 
-    List<TaskDto> lexoTasket();
+    List<TaskDto> read();
 
-    void fshiTask(int id);
+    void delete(int id);
 
 }
