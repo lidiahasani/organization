@@ -1,6 +1,6 @@
 create table task
 (
-    id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id int NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     title VARCHAR(50) NOT NULL,
     status VARCHAR(50) NOT NULL,
     id_project int,
