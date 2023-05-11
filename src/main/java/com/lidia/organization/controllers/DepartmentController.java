@@ -3,6 +3,7 @@ package com.lidia.organization.controllers;
 import com.lidia.organization.dto.DepartmentDto;
 import com.lidia.organization.services.api.DepartmentService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -19,9 +20,10 @@ public class DepartmentController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public void create(
+    public ResponseEntity<String> create(
             @RequestBody DepartmentDto departmentDto){
-        departmentService.create(departmentDto);
+        departmentService.createOrUpdate(departmentDto);
+        return ResponseEntity.ok("Department registered successfully!");
     }
 
     @GetMapping("/read/{id}")
@@ -41,7 +43,7 @@ public class DepartmentController {
     @PreAuthorize("hasAnyRole('ADMIN', 'DEPARTMENT_MANAGER')")
     public void update(
             @RequestBody DepartmentDto departmentDto){
-        departmentService.update(departmentDto);
+        departmentService.createOrUpdate(departmentDto);
     }
 
     @DeleteMapping("/delete/{id}")

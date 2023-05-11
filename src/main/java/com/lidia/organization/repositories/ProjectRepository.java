@@ -12,6 +12,8 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
 
     Optional<Project> findById(int id);
 
+    List<Project> findByDepartmentId(int id);
+
     @Transactional
     void deleteProjectById(int id);
 

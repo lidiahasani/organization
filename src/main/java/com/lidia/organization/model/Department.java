@@ -43,7 +43,7 @@ public class Department {
         this.employees = employeeList;
     }
 
-    public List<Project> getProjektList() {
+    public List<Project> getProjectList() {
         return projects;
     }
 

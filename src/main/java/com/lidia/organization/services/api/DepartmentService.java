@@ -6,13 +6,11 @@ import java.util.List;
 
 public interface DepartmentService {
 
-    void create(DepartmentDto departmentDto);
+    DepartmentDto createOrUpdate(DepartmentDto departmentDto);
 
     List<DepartmentDto> read();
 
     DepartmentDto read(int id);
-
-    void update(DepartmentDto departmentDto);
 
     void delete(int id);
 

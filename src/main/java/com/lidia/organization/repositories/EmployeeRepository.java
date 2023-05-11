@@ -4,6 +4,7 @@ import com.lidia.organization.model.Employee;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
@@ -13,6 +14,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     Optional<Employee> findByEmail(String email);
 
     Optional<Employee> findById(int id);
+
+    List<Employee> findByDepartmentId(int id);
 
     boolean existsByEmail(String email);
 
